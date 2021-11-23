@@ -2,7 +2,7 @@
 BCIT's CISA1360 Final Project in Python
 
 Sequence diagram of custom HTTP Platform the Carpool app was built on:
-![http platform](/assets/images/sequence of serving a static file.png)
+![http platform](/sequence of serving a static file.png)
 
 Code relationship of the Carpool application:
 ![static dependencies](./static dependencies.png)

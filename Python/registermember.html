@@ -1,0 +1,141 @@
+<html>
+<head>
+    <title>Register member</title>
+    <!--https://dev.to/felix/floating-input-placeholders-with-html-css-ej4-->
+    <style>
+        body {
+            background-color:black;
+            text-align:center;
+        }
+        div.container {
+            border-radius: 4px;
+            background-color:white;
+            padding: 20px;
+            margin: 20px;
+            max-width:500px;
+        }
+        h1 {
+            font-weight:bold;
+            display:block;
+            text-align:left;
+            font-family:Helvetica;
+            text-transform: capitalize;
+        }
+        h1::first-letter {
+            font-size:150%;
+        }
+        div.field {
+            border-radius: 4px;
+            background-color:silver;
+
+            display:block;
+            padding:4px;
+            padding-top:25px;
+            padding-right:50px;
+
+            text-align:left;
+
+            margin-bottom:20px
+        }
+        div.left {
+            text-align:left;
+        }
+
+        input[type=text] {
+            width:99%;
+            font:40px Helvetica;
+
+            background-color:silver;
+            border:0px solid silver;
+        }
+        input[type=text]:focus {
+            width:99%;
+            font:40px Helvetica;
+
+            background-color:silver;
+            border:0px solid silver;
+            outline:none;
+        }
+        input[type=submit],input[type=button] {
+            border-radius: 8px;
+            border-color:white;
+            border:0x solid white;
+            background-color:blue;
+            padding: 16px;
+            padding-left: 50px;
+            padding-right: 50px;
+            margin: 16px;
+
+            color:white;
+            font-size:16px;
+        }
+
+        form {
+          display: block;
+        }
+
+        div.field label {
+          font:20px Helvetica;
+          display: block;
+          transform: translate(0, -2.75rem);
+        }
+
+
+        @supports (not (-ms-ime-align:auto)) {
+            div.field label {
+              color: #999;
+              transform: translate(0.25rem, -2.0rem);
+              transition: all 0.2s ease-out;
+            }
+
+            div.field input:focus + label,
+            div.field input:not(:placeholder-shown) + label {
+              color: #111;
+              transform: translate(0, -4.15rem);
+              font-size:8pt;
+            }
+        }
+
+        input[type=checkbox] {
+            width:30px;
+            height:30px;
+        }
+        input[type=checkbox]:checked {
+            background-color:#abd;
+        }
+        div.left label {
+          font:20px Helvetica;
+        }
+    </style>
+</head>
+<body>
+    <div>
+    <form method="POST" action="registermembercgi.py">
+        <div class="container">
+            <h1>CAR POOL MEMBER</h1>
+            <div class="left"><!--@replacemewithjoinmessage/--></div>
+            &nbsp;
+            <div class="field">
+            <input type="text" name="email" id="email" value="" placeholder=" " required>
+            <label for="email">Enter email address:</label>
+            </div>
+            <div class="field">
+            <input type="text" name="displayname" id="displayname" value="" placeholder=" " required>
+            <label for="email">Enter display name:</label>
+            </div>
+            <div class="field">
+            <input type="text" name="address" id="address" value="" placeholder=" " required>
+            <input type="hidden" name="dest" value="@replacemewithdestinationcode/"/>
+            <label for="address">Enter address:</label>
+            </div>
+            <div class="left">
+                <input type="checkbox" name="hascar" id="hascar"/>
+                <label for="hascar">Willing to drive pool</label>
+            </div>
+            <input type="submit" name="submit" value="Create">
+            <input type="button" name="cancel" value="Cancel" onclick="location.href='allmembersmap.html'">
+        </div>
+    </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to the Car Pool Mash-up</title>
+</head>
+<body>
+    <iframe src="todaycgi.py" style="width:100%;height:50px;"></iframe>
+    First, you should know that this wasn't originally going to be javascript front-end.
+    It was just supposed to be a 8hr implementation of a http server.
+    Static pages, no fancy scripting on either end.
+
+    <p><img src="singlethreadhttpd.png"/></p>
+    What you are looking at (above) is about 800lines of python code, single threaded,
+    that looks for a file named after the GET instruction and outputs the file with
+    HTTP response header pre-pended.  That all you need to serve webpages.
+
+    <p>This is the <a href="https://httpd.apache.org/docs/2.4/misc/relevant_standards.html">RFC for HTTP linked to by apache</a>...</p>
+
+    <h1>So, no you can't do that in 8hrs</h1>
+
+    You can implement GET method, and return static pages:
+    <pre>
+    GET /todaycgi.py HTTP/1.1
+    ... HTTP Headers can be ignored for basic functionality ...
+    \r\n\r\n'
+    </pre>
+    which returns
+    <pre>
+    HTTP/1.1 200 OK'
+    Date: Sat, 20 Nov 2021 12:34:31 '
+    Server: 192.168.1.79'
+    Content-Type: text/html'
+    Content-Length: 122'
+    \n\n\r\n
+    &lt;html&gt;
+    &lt;head&gt;&lt;title>Today's date and time&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+    you are 127.0.0.1&lt;br&gt;
+    Sat, 20 Nov 2021 12:34:31
+    &lt;/head&gt;
+    &lt;/html&gt;
+    </pre>
+    But I got bored...
+    <br><br>
+    <a href="page4.html"> --> </a>
+</body>
+</html>

@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Pool Mashup</title>
+    <style>
+        html,body {
+            width:100%;
+            height:100%;
+            margin:0px;
+            padding:0px;
+        }
+        div#map {
+            width:100%;
+            height:100%;
+            margin:0px;
+            padding:0px;
+        }
+        div.app {
+            width:300px;
+            height:80%;
+
+            position:absolute;
+            top:80px;
+            left:0px;
+
+            padding:10px;
+            padding-top:0px;
+        }
+        div.app2 {
+            width:250px;
+            height:80%;
+
+            position:absolute;
+            top:80px;
+            left:340px;
+
+            padding:10px;
+            padding-top:0px;
+
+            display:none;
+        }
+        div.app div.border,
+        div.app2 div.border {
+            width:100%;
+            height:100%;
+
+            border-radius:4px;
+            border:1px solid silver;
+
+            box-shadow: 5px 5px 15px;
+
+            margin:20px;
+            padding:10px;
+            padding-top:0px;
+            background-color:white;
+
+            font-family:Helvetica,Arial;
+            font-size:14px;
+
+            overflow-y:auto;
+        }
+        div.border h1 {
+            font-family:Helvetica,Arial;
+            font-size:18px;
+        }
+        div.section  {
+            padding:4px;
+
+            font-family:Helvetica,Arial;
+            font-size:14px;
+        }
+
+        button.icobtn {
+            width:32px;
+            height:32px;
+            background-color:white;
+            border-radius:16px;
+            margin:5px;
+
+            font-size:16px;
+        }
+        button.icobtn:hover {
+            box-shadow: 2px 2px 5px;
+        }
+        button.icobtn:active {
+            box-shadow: 0px 0px 0px;
+            border:2px solid black;
+        }
+        div.destUI {
+            width:100%;
+            padding:4px;
+        }
+        div.destUI img,
+        div#members div img {
+            width:16px;
+            height:16px;
+        }
+        button.destUI {
+            width:100%;
+            padding:4px;
+
+            font-family:Helvetica,Arial;
+            font-size:14px;
+
+            text-align:left;
+        }
+        button.destUI:hover {
+            box-shadow: 2px 2px 5px;
+        }
+        button.destUI:active {
+            box-shadow: 0px 0px 0px;
+            border:2px solid black;
+        }
+        div#destination h3 {
+            padding-top:0px;
+            margin-top:0px;
+        }
+        .poolstandin {
+            text-align:center;
+        }
+        .poolstandin img {
+            width:32px;
+            height:32px;
+        }
+        div.poolUI {
+            width:96%;
+            padding:4px;
+            margin:4px;
+
+            border-radius:4px;
+            border:1px solid silver;
+            background-color:#EEEEEE;
+        }
+        div.poolUIdrag {
+            width:96%;
+            padding:4px;
+            margin:4px;
+
+            border-radius:4px;
+            border:1px solid silver;
+            background-color:#EEEEEE;
+
+            box-shadow:0px 0px 5px 1px #FFFF00;
+        }
+        .poolmemberUI {
+            border-radius:12px;
+            border:1px solid silver;
+
+            padding:1px;
+            padding-left:5px;
+
+            display:inline-block;
+            background-color:white;
+        }
+        div.progressbar  {
+            width:100%;
+            height:4px;
+            border:1px solid silver;
+            background-color:transparent;
+            padding:0px;
+        }
+        div.progressbar div  {
+            margin:0px;
+            height:2px;
+            background-color:blue;
+        }
+        button.icominibtn {
+            width:16px;
+            height:16px;
+            background-color:white;
+            border-radius:8px;
+            margin:1px;
+            padding:0px;
+
+            font-size:8px;
+        }
+        .memberUI {
+            border-radius:12px;
+            border:1px solid silver;
+
+            padding:5px;
+            margin-bottom:5px;
+
+            background-color:white;
+            cursor:grab;
+        }
+        .strikeoutMemberUI {
+            text-decoration: line-through;
+            color:silver;
+        }
+        .memberUIdrag {
+            border-radius:12px;
+            border:1px solid silver;
+
+            padding:5px;
+            margin-bottom:5px;
+
+            background-color:white;
+            cursor:grabbing;
+        }
+        .memberUI:hover {
+            box-shadow: 2px 2px 5px;
+        }
+        .memberUI img,
+        .memberUIdrag img{
+            float:right;
+            width:32px;
+            height:32px;
+        }
+
+        .mouseable {
+            padding:2px;
+            margin:4px;
+            margin-bottom:10px;
+            border-bottom:4px solid transparent;
+        }
+        .mouseable:hover {
+            border-bottom:4px solid lightblue;
+        }
+
+        button.icominibtn:hover {
+            box-shadow: 0px 0px 3px;
+        }
+        button.icominibtn:active {
+            box-shadow: 0px 0px 0px;
+            border:1px solid black;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            width: 2px;
+            background: white;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+
+    <script>
+        function getXHR() {
+            if (window.XMLHttpRequest) {
+                return new XMLHttpRequest();
+            } else {
+                return new ActiveXObject('Microsoft.XMLHTTP');
+            }
+        }
+        function ajaxPost(fm, callback, error) {
+            var req = getXHR();
+            if (!req) return false;
+
+            req.onload = callback;
+            req.onerror = error;
+
+            var len = fm.length;
+            var delimiter = "";
+            var postdata = "";
+            for (var i = 0; i < len; i++) {
+                var field = fm.elements[i];
+                if (field.tagName == "INPUT") {
+                    var fieldType = field.type;
+                    if (fieldType == "radio" || fieldType == "checkbox") {
+                        if (field.checked)
+                            postdata += delimiter + encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                    } else if (fieldType == "text" || fieldType == "hidden")
+                        postdata += delimiter + encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                }
+                else if (field.tagName == "TEXTAREA")
+                    postdata += delimiter + encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                if(delimiter=="" && postdata!="")
+                    delimiter = "&";
+            }
+            var url = fm.action;
+
+            if ('withCredentials' in req)
+                req.open('post', url, true);
+            else {
+                req = new XDomainRequest();
+                req.open('post', url);
+            }
+
+            console.log("Sending " + postdata + " to " + url);
+            req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); //https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+            req.withCredentials = true;
+            req.send(postdata);
+
+            cancellableXHR = req;
+            return true;
+        }
+        function getJson(jsonURL, stateForCallback, callback, errorback) {
+            var req = getXHR();
+            if(callback!=null)
+                req.onload = function () {
+                    var json = this.response;
+                    var deserialized = JSON.parse(json);
+                    callback(deserialized,stateForCallback);
+                };
+            if(errorback!=null)
+                req.error = errorback
+            //var url = "http://www.tictawf.net:80/CartographySalesman/Ajax/Heartbeat?timestamp=" + (new Date()).toDateString();
+            var url = relativeUrl(jsonURL);
+            req.open('get', url, true);
+            req.send(null);
+        }
+
+        function relativeUrl(filename) {
+            var me=location.href;
+            var parts = me.split("/");
+            parts[parts.length-1]="";
+            var path=parts.join("/")
+            return path+filename
+        }
+    </script>
+    <script>
+        var memberreference = [];
+        var menustate=null;
+        function loadDestination() {
+            menustate=1;
+            pathsinview.forEach(s=>s.setMap(null));
+            pathsinview.length=0;   //pathsinview=[];
+            coordinatesinview = [];   //clearing the data that zoom uses
+            markersinview.forEach(s=>s.setMap(null));
+            markersinview.length=0;   //markersinview=[];
+            memberreference = [];  //the member <-> poollink, relationship is invalid as both are destroyed here
+            getJson("destindex.json", null, function(json) {
+                closeapp2();
+                document.getElementById("pools").innerHTML="";
+                document.getElementById("members").innerHTML="";
+                container = document.getElementById("destination");
+
+                //var json=JSON.parse('[{"name":"BCIT Burnaby", "url":"a.json", "geocode":"a.geocode.json"},{"name":"BCIT Downtown", "url":"b.json", "geocode":"b.geocode.json"}]');
+                var l = json.length;
+                if(l==0)
+                    container.innerHTML="No car pool destinations, yet.  Add one, then return here and select it to add members.";
+                else
+                    container.innerHTML="Where do you car pool to?";
+                for(var i=0; i<l; i++) {
+                    var item = json[i];
+                    //{"Hell": "ec000713-3770-4d67-a912-16581e43a4d5.json"}
+                    var interim = container.appendChild(document.createElement("div"));
+                    interim.className="destUI";
+                    interim.appendChild(document.createTextNode(item.name));
+                    interim.appendChild(document.createElement("img")).src="Spin-1s-200px.gif";
+                    getJson(item.url, interim, (json2,replaceme) => {
+                        // {"name":"BCIT Burnaby", "url":"a.json", "geocode":"a.geocode.json"}
+                        var samecontainer = document.getElementById("destination");
+                        var element = buildDestinationUI(json2);
+                        //container.appendChild(element);
+                        samecontainer.replaceChild(element,replaceme);
+
+                        var clicktext = "<b>"+json2.destinationname+"</b><br>"+json2.address;
+                        getJson(json2.geocodefile, [clicktext,element], (json3,state) => {
+                            var tooltip = state[0];
+                            var relatedcontainer = state[1];
+                            //{'results': [{'address_components': [{'long_name': '3700', 'short_name': '3700', 'types': ['street_number']}, {'long_name': 'Willingdon Avenue', 'short_name': 'Willingdon Ave', 'types': ['route']}, {'long_name': 'Burnaby', 'short_name': 'Burnaby', 'types': ['locality', 'political']}, {'long_name': 'Metro Vancouver', 'short_name': 'Metro Vancouver', 'types': ['administrative_area_level_2', 'political']}, {'long_name': 'British Columbia', 'short_name': 'BC', 'types': ['administrative_area_level_1', 'political']}, {'long_name': 'Canada', 'short_name': 'CA', 'types': ['country', 'political']}, {'long_name': 'V5G 3H2', 'short_name': 'V5G 3H2', 'types': ['postal_code']}], 'formatted_address': '3700 Willingdon Ave, Burnaby, BC V5G 3H2, Canada', 'geometry': {'location': {'lat': 49.2501606, 'lng': -123.0009816}, 'location_type': 'ROOFTOP', 'viewport': {'northeast': {'lat': 49.2515095802915, 'lng': -122.9996326197085}, 'southwest': {'lat': 49.2488116197085, 'lng': -123.0023305802915}}}, 'place_id': 'ChIJO43GEiB3hlQR-QY96UgF0jQ', 'plus_code': {'compound_code': '7X2X+3J Burnaby, BC, Canada', 'global_code': '84XR7X2X+3J'}, 'types': ['street_address']}], 'status': 'OK'}
+                            if(json3.status && json3.status=="OK" && menustate==1) {
+                                var lat = json3.results[0].geometry.location.lat;
+                                var lon = json3.results[0].geometry.location.lng;
+                                var marker = waypoint(lat,lon,2,1);
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: tooltip
+                                });
+                                marker.addListener('click', function() {
+                                    if(openinfowindow!=null){
+                                        openinfowindow.close();
+                                        openinfowindow=null;
+                                    }
+                                    infowindow.open(oGoogleMap, marker);
+                                    openinfowindow = infowindow;
+                                });
+                                coordinatesinview.push({ lat: lat, lng: lon });
+                                markersinview.push(marker);
+                                relatedcontainer.marker=marker;
+                                if(fittimeout==0)
+                                    fittimeout = window.setTimeout(function() {
+                                        fit(coordinatesinview);
+                                        fittimeout=0
+                                    },2000); //wait 2 sec, before trying to zoom the markers into view
+                            }
+                        });
+                    });
+                }
+                container.appendChild(buildAddbar("Car pool destination not here?", function(event){
+                    location.href="register.html";
+                }));
+            },function(json) {
+                console.log("retry...");
+                setTimeout(loadDestination, 1000); //retry every second until success
+            });
+        }
+        function buildDestinationUI(json) {
+            //var name=json.name;
+            //var url=json.url;
+
+            var container = document.createElement("div");
+            container.className="destUI";
+            var button = container.appendChild(document.createElement("button"));
+            button.appendChild(document.createTextNode(json.destinationname));
+            //button.name=name;
+            //button.url=url;
+            button.json=json;
+            button.className="destUI";
+            button.addEventListener("click", function(event){
+                menustate=2;
+                markersinview.forEach(s=>s.setMap(null)); //clearing for relevant markers
+                markersinview=[];
+                coordinatesinview=[];
+                if(this.parentNode.marker) {
+                    this.parentNode.marker.setMap(oGoogleMap);
+                    markersinview.push(this.parentNode.marker);
+                    console.log(this.parentNode.marker.location);
+                }
+
+                var destination=event.target; //in this case, the button
+                container = document.getElementById("destination");
+                document.getElementById("destination").current=destination;
+                container.innerHTML = "";
+                container.appendChild(buildBackbar("Pick another car pool destination", loadDestination));
+                container.appendChild(document.createTextNode("Below are car pools going to:"));
+                container.appendChild(document.createElement("h3")).innerText=destination.json.destinationname;
+
+                if(this.json.suggestfile) {
+                    container.appendChild(buildSuggest(this.json));
+                    container.appendChild(document.createElement("br"));
+                    container.appendChild(document.createElement("br"));
+                }
+
+                loadPool(destination);
+                loadMembers(destination);
+
+                if(this.json.mstpathfile)
+                    getJson(this.json.mstpathfile, null, function(json2) {
+                        console.log("processing dest path");
+                        //[[[49.2262889, -122.9363737], [49.22706059999999, -122.9359349], 91.53450771305616], [[49.2303429, -123.0041166], [49.2289428, -123.0043527], 156.62513025098656], [[49.22592059999999, -122.9766142], [49.2255255, -122.9789194], 173.07085211785835], [[49.2249144, -122.9895513], [49.22428799999999, -122.9859723], 269.0813958039488], [[49.2264152, -123.0041251], [49.2289428, -123.0043527], 281.54182592274117], [[49.2407035, -123.0189431], [49.2371799, -123.0218625], 445.45955980081607], [[49.2255255, -122.9789194], [49.22428799999999, -122.9859723], 530.3471365898179], [[49.2262889, -122.9363737], [49.226675, -122.943747], 537.1538033497148], [[49.2332688, -123.0116386], [49.2303429, -123.0041166], 635.7330033406549], [[49.2577043, -123.0232036], [49.2641473, -123.0222089], 720.0560794522404], [[49.2332688, -123.0116386], [49.2371799, -123.0218625], 860.3233389425459], [[49.2641473, -123.0222089], [49.2675628, -123.0107421], 914.6136681428173], [[49.2249144, -122.9895513], [49.2264152, -123.0041251], 1071.4161250625718], [[49.2577043, -123.0232036], [49.25668510000001, -123.0067689], 1198.0875004471598], [[49.2470302, -123.1659174], [49.2530593, -123.1809706], 1281.8926464099825], [[49.2407035, -123.0189431], [49.2577043, -123.0232036], 1915.5302894731353], [[49.2694023, -123.160479], [49.2530593, -123.1809706], 2348.1148030176073], [[49.22592059999999, -122.9766142], [49.226675, -122.943747], 2388.237586925136], [[49.2005232, -122.9539828], [49.226675, -122.943747], 3001.4910705446046], [[49.3500501, -123.0768541], [49.33707589999999, -123.0360594], 3288.7273778815857], [[49.24587400000001, -122.898084], [49.22706059999999, -122.9359349], 3453.7462793502514], [[49.2371799, -123.0218625], [49.2224358, -123.0743416], 4148.388476982194], [[49.2224358, -123.0743416], [49.2613622, -123.0958786], 4602.140926556839], [[49.2694023, -123.160479], [49.2613622, -123.0958786], 4771.960961181077], [[49.2675628, -123.0107421], [49.33707589999999, -123.0360594], 7944.490047325841], [[49.24587400000001, -122.898084], [49.2963797, -122.7657937], 11120.279594542393]]
+                        // to { lat: 37.772, lng: -122.214 }
+                        pathsinview.forEach(s=>s.setMap(null));
+                        pathsinview = json2.map(s=>mstpath([{ lat: s[0][0], lng: s[0][1] },{ lat: s[1][0], lng: s[1][1] }]));
+                    });
+
+                return false;
+            });
+
+            return container;
+        }
+        function buildSuggest(json) {
+            url=json.suggestfile;
+            var container = document.createElement("span");
+            container.className="mouseable";
+            var chkbox = container.appendChild(document.createElement("input"));
+            chkbox.type="checkbox";
+            chkbox.id=url;
+            var lbl = container.appendChild(document.createElement("label"));
+            lbl.type="checkbox";
+            lbl.htmlFor=url;
+            lbl.appendChild(document.createTextNode("See Suggested Pools on Map"));
+            lbl.appendChild(document.createElement("span")).id=url+"label";
+            //container.appendChild(document.createElement("br"));
+
+            container.jsonurl=url;
+            container.addEventListener("mouseover", function(event) {
+                //pathsinview.forEach(s=>s.setMap(null)); //clearing for relevant markers
+                if(this.pathlist)
+                    for(var i=0; i<this.pathlist.length; i++) {
+                        this.pathlist.forEach(s=>s.setMap(oGoogleMap));
+                    }
+                else if(this.jsonurl) {
+                    this.pathlist=[];
+                    getJson(this.jsonurl, null, (json2,state) => {
+                        var l = json2.length;
+                        var pathlist=[];
+                        for(var i=0; i<l; i++) {
+                            var lst=json2[i].map(s=>({ lat: s[0], lng: s[1] }));
+                            var path=straightpath(lst);
+                            pathlist.push(path);
+                            pathsinview.push(path);
+                        }
+                        this.pathlist=pathlist;
+                    });
+                }
+            });
+            container.addEventListener("mouseout", function(event){
+                //pathsinview.forEach(s=>s.setMap(oGoogleMap));
+                if(this.pathlist && !this.firstChild.checked)
+                    for(var i=0; i<this.pathlist.length; i++) {
+                        this.pathlist.forEach(s=>s.setMap(null));
+                    }
+            });
+
+            return container;
+        }
+
+        function buildBackbar(title, listener) {
+            var container = document.createElement("div");
+            var back = document.createElement("button");
+            back.className="icobtn";
+            back.appendChild(document.createTextNode("<"));
+            container.appendChild(back);
+            container.appendChild(document.createTextNode(title));
+            back.addEventListener("click", listener);
+            return container;
+        }
+        function buildAddbar(title, listener) {
+            var container = document.createElement("div");
+            var back = document.createElement("button");
+            back.className="icobtn";
+            back.appendChild(document.createTextNode("+"));
+            container.appendChild(back);
+            container.appendChild(document.createTextNode(title));
+            back.addEventListener("click", listener);
+            return container;
+        }
+        function buildFwdbar(title, listener) {
+            var container = document.createElement("div");
+            container.appendChild(document.createTextNode(title));
+            container.style.textAlign="right";
+
+            var fwd = document.createElement("button");
+            fwd.className="icobtn";
+            fwd.appendChild(document.createTextNode(">"));
+            container.appendChild(fwd);
+            fwd.addEventListener("click", listener);
+            return container;
+        }
+        function emptypool(destinationurl) {
+            //get a pool id
+            return {"type" :"pool",
+                "filename":null,
+                "destinationfile":destinationurl,
+                "member1":null,"member2":null,"member3":null,"member4":null,"member5":null,"member6":null,
+                "matrixfile": null,
+                "pathfile": null,
+                "progress":null
+            };
+        }
+        function loadPool(destination) {
+            //var json=JSON.parse('[{"type" :"pool","filename":"filename.json","destinationfile":"group.json","member1":"member1","member2":"member2","member3":"member3","member4":"member4","member5":null,"member6":null,"matrixfile": "matrix.json","pathfile": "path.json","progress":80},{"type" :"pool","filename":"filename.json","destinationfile":"group.json","member1":"member1","member2":"member2","member3":"member3","member4":"member4","member5":null,"member6":null,"matrixfile": "matrix.json","pathfile": "path.json","progress":80},{"type" :"pool","filename":"filename.json","destinationfile":"group.json","member1":"member1","member2":"member2","member3":"member3","member4":"member4","member5":null,"member6":null,"matrixfile": "matrix.json","pathfile": "path.json","progress":80}]');
+            //console.log(destination.json.poollistfile);
+
+            var url=destination.json.poollistfile;
+            getJson(url, null, function(json) {
+                //var json=destination.json.pools;
+                container = document.getElementById("pools");
+                var l = json.length;
+                if(l==0)
+                    json.push(emptypool(destination.json.filename));
+                container.innerHTML="Car pool(s)";
+                for(var i=0; i<l; i++) {
+                    var item = json[i];
+                    div=container.appendChild(document.createElement("div"));
+                    div.className="poolstandin";
+                    div.appendChild(document.createElement("img")).src="Spin-1s-200px.gif";
+                    container.appendChild(div); //stand in
+                    getJson(item, div, function(json2a,stateA) {
+                        var queued=function(packed) {
+                            var json2=packed[0];
+                            var queued2=packed[1];
+                            var state=packed[2];
+                            container=state.parentNode;
+                            if(container.lock) {
+                                setTimeout(queued2,Math.floor(Math.random() * 100),json2);
+                                return;
+                            } else
+                                container.lock=true;
+                            try {
+                                var element = buildPoolUI(json2);
+                                //container.appendChild(element);
+                                //Mozilla: replaceChild(newChild, oldChild);
+                                state.parentNode.replaceChild(element,state);
+                            } finally {
+                                container.lock=false;
+                            }
+                        };
+                        queued([json2a,queued,stateA]); //this is my solution to contention on one node, if something is accessing it, just make it wait a random amount and try again... ala CSMA/CD
+                    });
+                }
+
+                container.appendChild(buildAddbar("Add a pool.", function(event) {
+                    var destcontainer = document.getElementById("destination");
+                    var destination2 = destcontainer.current;
+                    var container2 = document.getElementById("pools");
+                    var item2 = emptypool(destination2.json.filename)
+                    var element2 = buildPoolUI(item2);
+                    //container2.appendChild(element2);
+                    event.target.parentNode.insertBefore(element2,event.target);
+                }));
+                container.appendChild(buildFwdbar("Open members list", function(event) {
+                    var container2 = document.getElementById("app2");
+                    container2.style.display="block";
+                }));
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createElement("br"));
+                container.appendChild(buildAddbar("Add yourself as member, to join a pool", function(event) {
+                    var destination2 = document.getElementById("destination").current;
+                    if(destination2!=null)
+                        location.href="registermemberwithdestcgi.py?dest=" + encodeURIComponent(destination2.json.filename);
+                        //console.log(destination2.json.filename);
+                    else
+                        console.error("Add member button in pool section, cannot get the currently selected destination");
+                }));
+            });
+        }
+        function buildPoolUI(json) {
+            //{"type" :"pool","filename":null,"destinationfile":destination.url,"member1":null,"member2":null,"member3":null,"member4":null,"member5":null,"member6":null,"matrixfile": null,"pathfile": null,"progress":null}
+            //var name=json.name;
+            //var url=json.url;
+            //var geocode=json.geocode;
+            //console.log("pool");
+            //console.log(json);
+
+            var container = document.createElement("div");
+            container.className="poolUI";
+            container.json = json;
+            if(container.json.pathfile) {
+                container.appendChild(buildPoolPath(container.json));
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createElement("br"));
+            }
+
+            if(json.member1) appendStrawmanReplaceWith(container,createStrawmanIn(container),json.member1,buildLinkUI);
+            if(json.member2) appendStrawmanReplaceWith(container,createStrawmanIn(container),json.member2,buildLinkUI);
+            if(json.member3) appendStrawmanReplaceWith(container,createStrawmanIn(container),json.member3,buildLinkUI);
+            if(json.member4) appendStrawmanReplaceWith(container,createStrawmanIn(container),json.member4,buildLinkUI);
+            if(json.member5) appendStrawmanReplaceWith(container,createStrawmanIn(container),json.member5,buildLinkUI);
+            if(json.member6) appendStrawmanReplaceWith(container,createStrawmanIn(container),json.member6,buildLinkUI);
+
+            if(json.member1==null && json.member2==null && json.member3==null
+            && json.member4==null && json.member5==null && json.member6==null)
+                emptypoolUI(container);
+
+
+            /*
+            var progress = document.createElement("div");
+            progress.className="progressbar";
+            var loading = progress.appendChild(document.createElement("div"))
+            loading.style.width="40%";
+            container.appendChild(progress);
+            if(json.progress==null)
+                progress.style.display="none";
+            else
+                loading.style.width=""+json.progress+"%";
+            */
+
+            container.addEventListener("drop", drop);
+            container.addEventListener("dragover", allowDrop);
+            container.addEventListener("dragenter", enterDrop);
+            container.addEventListener("dragleave", leaveDrop);
+
+/*
+            if(json.pathfile)
+                getJson(json.pathfile, null, function(json2) {
+                    console.log("processing pool path");
+                    //[[[49.2262889, -122.9363737], [49.22706059999999, -122.9359349], 91.53450771305616], [[49.2303429, -123.0041166], [49.2289428, -123.0043527], 156.62513025098656], [[49.22592059999999, -122.9766142], [49.2255255, -122.9789194], 173.07085211785835], [[49.2249144, -122.9895513], [49.22428799999999, -122.9859723], 269.0813958039488], [[49.2264152, -123.0041251], [49.2289428, -123.0043527], 281.54182592274117], [[49.2407035, -123.0189431], [49.2371799, -123.0218625], 445.45955980081607], [[49.2255255, -122.9789194], [49.22428799999999, -122.9859723], 530.3471365898179], [[49.2262889, -122.9363737], [49.226675, -122.943747], 537.1538033497148], [[49.2332688, -123.0116386], [49.2303429, -123.0041166], 635.7330033406549], [[49.2577043, -123.0232036], [49.2641473, -123.0222089], 720.0560794522404], [[49.2332688, -123.0116386], [49.2371799, -123.0218625], 860.3233389425459], [[49.2641473, -123.0222089], [49.2675628, -123.0107421], 914.6136681428173], [[49.2249144, -122.9895513], [49.2264152, -123.0041251], 1071.4161250625718], [[49.2577043, -123.0232036], [49.25668510000001, -123.0067689], 1198.0875004471598], [[49.2470302, -123.1659174], [49.2530593, -123.1809706], 1281.8926464099825], [[49.2407035, -123.0189431], [49.2577043, -123.0232036], 1915.5302894731353], [[49.2694023, -123.160479], [49.2530593, -123.1809706], 2348.1148030176073], [[49.22592059999999, -122.9766142], [49.226675, -122.943747], 2388.237586925136], [[49.2005232, -122.9539828], [49.226675, -122.943747], 3001.4910705446046], [[49.3500501, -123.0768541], [49.33707589999999, -123.0360594], 3288.7273778815857], [[49.24587400000001, -122.898084], [49.22706059999999, -122.9359349], 3453.7462793502514], [[49.2371799, -123.0218625], [49.2224358, -123.0743416], 4148.388476982194], [[49.2224358, -123.0743416], [49.2613622, -123.0958786], 4602.140926556839], [[49.2694023, -123.160479], [49.2613622, -123.0958786], 4771.960961181077], [[49.2675628, -123.0107421], [49.33707589999999, -123.0360594], 7944.490047325841], [[49.24587400000001, -122.898084], [49.2963797, -122.7657937], 11120.279594542393]]
+                    // to { lat: 37.772, lng: -122.214 }
+                    var path = json2.map(s=> ({ lat: s[0][0], lng: s[0][1] }) );
+                    path.push( { lat: json2[json2.length-1][1][0], lng: json2[json2.length-1][1][1] });
+                    pathsinview.push(straightpath(path));
+                });*/
+
+            return container;
+        }
+        function buildPoolPath(json) {
+            url=json.pathfile;
+            var container = document.createElement("span");
+            container.className="mouseable";
+            var chkbox = container.appendChild(document.createElement("input"));
+            chkbox.type="checkbox";
+            chkbox.id=url;
+            var lbl = container.appendChild(document.createElement("label"));
+            lbl.type="checkbox";
+            lbl.htmlFor=url;
+            lbl.id=url+"label";
+            lbl.appendChild(document.createTextNode("See Best Path"));
+
+            container.jsonurl=url;
+            container.addEventListener("mouseover", function(event) {
+                // pathsinview.forEach(s=>s.setMap(null)); //clearing for relevant markers
+                if(this.path)
+                    this.path.setMap(oGoogleMap);
+                else if(this.jsonurl) {
+                    getJson(this.jsonurl, this, (json2,state) => {
+                        //console.log(json2);
+                        var last=json2.length-1;
+                        var lst=json2.map(s=>({ lat: s[0][0], lng: s[0][1] }));
+                        lst.push({ lat: json2[last][1][0], lng: json2[last][1][1] });
+                        this.title = "Duration: " + (json2.reduce((p,v)=> p+v[2],0)/60).toFixed(1) + "min";
+                        if(!this.jsontriggered)
+                            this.appendChild(document.createElement("b")).innerText="  "+this.title;
+                        this.jsontriggered=1;
+                        if(!this.path) {
+                            var path=drivingpath(lst);
+                            this.path=path;
+                            pathsinview.push(path);
+                        }
+                    });
+                }
+            });
+            container.addEventListener("mouseout", function(event){
+                //pathsinview.forEach(s=>s.setMap(oGoogleMap));
+                if(this.path && !this.firstChild.checked)
+                    this.path.setMap(null);
+            });
+
+            return container;
+        }
+        function appendStrawmanReplaceWith(container,strwman,jsonURL,replaceonload) {
+            getJson(jsonURL, strwman, function(json, state) {
+                //Mozilla: replaceChild(newChild, oldChild);
+                state.parentNode.replaceChild(replaceonload(json),state);
+            });
+        }
+        function appendStrawmanAwaitingJson(container,strwman,json,onload) {
+            //var strwman=createStrawmanIn(container);
+            getJson(jsonURL, strwman, onload);
+        }
+        function createStrawmanIn(container) {
+            var div=container.appendChild(document.createElement("div"));
+            div.className="poolstandin";
+            div.appendChild(document.createElement("img")).src="Spin-1s-200px.gif";
+            return div;
+        }
+        function emptypoolUI(poolcontainer){
+            var empty = poolcontainer.appendChild(document.createElement("span"));
+            poolcontainer.replaceme = empty;
+            empty.appendChild(document.createTextNode("Open members list window..."));
+            empty.appendChild(document.createElement("br"));
+            empty.appendChild(document.createElement("br"));
+            empty.appendChild(document.createTextNode("\xa0\xa0\xa0\xa0...drag member here, to add to this pool"));
+            return empty;
+        }
+        function buildLinkUI(json) {
+            var doc=document;
+            var container = doc.createElement("div");
+            container.className = "poolmemberUI";
+            container.appendChild(doc.createTextNode(json.displayname));
+            //container.appendChild(doc.createElement("i")).appendChild(doc.createTextNode(" ("+json.email+")"));
+            container.title=json.email + "\n" + json.address;
+            container.filename=json.filename;
+            container.json=json;
+
+            container.appendChild(doc.createTextNode(" "));
+            var x = doc.createElement("button");
+            x.className="icominibtn";
+            x.appendChild(doc.createTextNode("X"));
+            x.addEventListener("click", function(event) {
+                var memberlink=this.parentNode;
+                var poolcontainer=memberlink.parentNode;
+                var remaining=Array.from(poolcontainer.childNodes);
+                var count=remaining.map(s=>s.className=="poolmemberUI"?1:0).reduce((p,c)=>p+c);
+                memberlink.remove();
+
+                delMemberFromPool(memberlink.json, poolcontainer);
+                if(count<=1)
+                    emptypoolUI(poolcontainer);
+
+                const filename=memberlink.json.filename;
+                if(filename) registerMemberEvent({event:"unlink",filename:filename,ui:null,link:null});
+            });
+            container.appendChild(x);
+
+            container.addEventListener("mouseover", startbounceHandler);
+            container.addEventListener("mouseout", stopbounceHandler);
+
+            if(json.filename) registerMemberEvent({event:"link",filename:json.filename,ui:null,link:container});
+            return container;
+        }
+        function addMemberToPool(dropjson, poolcontainer) {
+            var json=poolcontainer.json;
+            var memberlist=[json.member1,json.member2,json.member3,json.member4,json.member5,json.member6];
+            var count=memberlist.map(s=>s?1:0).reduce((p,c)=>p?p+c:0)
+            if(memberlist.includes(dropjson.filename)) {
+                alert("[" + dropjson.email + "] has been added already");
+                console.log("[" + dropjson.email + "] has been added already");
+                return false;
+            } else if (count>=6) {
+                alert("This pool is full. Max:6/pool");
+                console.log("This pool is full. Max:6/pool");
+                console.log(memberlist);
+                return false;
+            } else {
+                if(!json.member1)
+                    json.member1=dropjson.filename;
+                else if(!json.member2)
+                    json.member2=dropjson.filename;
+                else if(!json.member3)
+                    json.member3=dropjson.filename;
+                else if(!json.member4)
+                    json.member4=dropjson.filename;
+                else if(!json.member5)
+                    json.member5=dropjson.filename;
+                else if(!json.member6)
+                    json.member6=dropjson.filename;
+                else {
+                    alert("This pool is already full");
+                    return false;
+                }
+
+                var form = document.createElement("form");
+                var destfilename = form.appendChild(document.createElement("input"));
+                var poolfilename = form.appendChild(document.createElement("input"));
+                var member1field = form.appendChild(document.createElement("input"));
+                var member2field = form.appendChild(document.createElement("input"));
+                var member3field = form.appendChild(document.createElement("input"));
+                var member4field = form.appendChild(document.createElement("input"));
+                var member5field = form.appendChild(document.createElement("input"));
+                var member6field = form.appendChild(document.createElement("input"));
+
+                form.method = "POST";
+                form.action = "savepoolcgi.py";
+                destfilename.name="destinationfile";
+                destfilename.value=json.destinationfile;
+                poolfilename.name="poolfilename";
+                poolfilename.value=json.filename;
+                member1field.name="member1";
+                member1field.value=json.member1;
+                member2field.name="member2";
+                member2field.value=json.member2;
+                member3field.name="member3";
+                member3field.value=json.member3;
+                member4field.name="member4";
+                member4field.value=json.member4;
+                member5field.name="member5";
+                member5field.value=json.member5;
+                member6field.name="member6";
+                member6field.value=json.member6;
+
+                //form.submit();
+                ajaxPost(form,function() {
+                    var returnedpoolfilename=this.response;
+                    console.log(returnedpoolfilename);
+                    if(this.status==200 && !poolcontainer.json.filename)
+                        poolcontainer.json.filename=returnedpoolfilename
+                },function(){});
+
+                return true;
+            }
+        }
+        function delMemberFromPool(clickjson, poolcontainer) {
+            var json=poolcontainer.json;
+            var memberlist=[json.member1,json.member2,json.member3,json.member4,json.member5,json.member6];
+            if(!memberlist.includes(clickjson.filename)) {
+                console.error("This should never happen, but member is not in pool you are trying to remove him from");
+                return false;
+            } else {
+                if(json.member1==clickjson.filename)
+                    json.member1=null;
+                else if(json.member2==clickjson.filename)
+                    json.member2=null;
+                else if(json.member3==clickjson.filename)
+                    json.member3=null;
+                else if(json.member4==clickjson.filename)
+                    json.member4=null;
+                else if(json.member5==clickjson.filename)
+                    json.member5=null;
+                else if(json.member6==clickjson.filename)
+                    json.member6=null;
+                else {
+                    console.error("This should never happen, but member is not in pool you are trying to remove him from");
+                    return false;
+                }
+
+                var form = document.createElement("form");
+                var destfilename = form.appendChild(document.createElement("input"));
+                var poolfilename = form.appendChild(document.createElement("input"));
+                var member1field = form.appendChild(document.createElement("input"));
+                var member2field = form.appendChild(document.createElement("input"));
+                var member3field = form.appendChild(document.createElement("input"));
+                var member4field = form.appendChild(document.createElement("input"));
+                var member5field = form.appendChild(document.createElement("input"));
+                var member6field = form.appendChild(document.createElement("input"));
+
+                form.method = "POST";
+                form.action = "savepoolcgi.py";
+                destfilename.name="destinationfile";
+                destfilename.value=json.destinationfile;
+                poolfilename.name="poolfilename";
+                poolfilename.value=json.filename;
+                member1field.name="member1";
+                member1field.value=json.member1;
+                member2field.name="member2";
+                member2field.value=json.member2;
+                member3field.name="member3";
+                member3field.value=json.member3;
+                member4field.name="member4";
+                member4field.value=json.member4;
+                member5field.name="member5";
+                member5field.value=json.member5;
+                member6field.name="member6";
+                member6field.value=json.member6;
+
+                //form.submit();
+                ajaxPost(form,function() {
+                    var returnedpoolfilename=this.response;
+                    console.log(returnedpoolfilename);
+                },function(){});
+
+                return true;
+            }
+        }
+        function loadMembers(destination) {
+            // destination typically is the button object, which should have attributes assigned based on the json element that created it
+            // each button is stored the destination json that created it, and you should only be getting here if they clicked it
+            // But each button that is clicked, document.getElementById("destination").current=destination, so you can always lookup what is current destination
+            //console.log(destination.json);
+            coordinatesinview = [];
+
+            var url=destination.json.memberlistfile; //or url
+            getJson(url, null, function(json) {
+                //json = JSON.parse('[{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"},{"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"}]');
+                container = document.getElementById("members");
+                container.innerHTML="Drag member to a car pool<br>&nbsp;";
+                var l = json.length;
+                for(var i=0; i<l; i++) {
+                    var item = json[i];
+                    div=container.appendChild(document.createElement("div"));
+                    div.appendChild(document.createElement("img")).src="Spin-1s-200px.gif";
+                    div.appendChild(document.createTextNode("Getting "+item.email));
+                    getJson(item.memberfile, div, function(json2a,stateA) {
+                        var queued=function(packed) {
+                            var json2 = packed[0];
+                            var queued2 = packed[1];
+                            var state = packed[2];
+                            container2 = document.getElementById("members");
+                            if(container2.lock) {
+                                setTimeout(queued2, Math.floor(Math.random() * 500), jsonresult);
+                                return;
+                            } else
+                                container2.lock=true;
+                            try {
+                                membercontainer=document.getElementById("members");
+                                var element = buildMemberUI(json2);
+                                //container.appendChild(element);
+                                //membercontainer.replaceChild(element,state);
+                                //console.log(membercontainer)
+                                //console.log(element);
+                                //console.log(state);
+                                //replaceChild(newChild, oldChild);
+                                //membercontainer.replaceChild(element,state);
+                                if(state.parentNode!=null)
+                                    state.parentNode.replaceChild(element,state);
+                                else {
+                                    console.log("A replace was called on member stand-in, but parentNode is null, so it might have been replaced again")
+                                    console.log(state)
+                                }
+
+                                if(json2.geocodefile)
+                                    getJson(json2.geocodefile, element, (json3,state3) => {
+                                        const memberDiv = state3;
+                                        const memberJSON = memberDiv.json;
+                                        var clicktext = "<b>"+memberJSON.displayname+"</b><br>"+memberJSON.email+"<br>"+memberJSON.address;
+                                        //{'results': [{'address_components': [{'long_name': '3700', 'short_name': '3700', 'types': ['street_number']}, {'long_name': 'Willingdon Avenue', 'short_name': 'Willingdon Ave', 'types': ['route']}, {'long_name': 'Burnaby', 'short_name': 'Burnaby', 'types': ['locality', 'political']}, {'long_name': 'Metro Vancouver', 'short_name': 'Metro Vancouver', 'types': ['administrative_area_level_2', 'political']}, {'long_name': 'British Columbia', 'short_name': 'BC', 'types': ['administrative_area_level_1', 'political']}, {'long_name': 'Canada', 'short_name': 'CA', 'types': ['country', 'political']}, {'long_name': 'V5G 3H2', 'short_name': 'V5G 3H2', 'types': ['postal_code']}], 'formatted_address': '3700 Willingdon Ave, Burnaby, BC V5G 3H2, Canada', 'geometry': {'location': {'lat': 49.2501606, 'lng': -123.0009816}, 'location_type': 'ROOFTOP', 'viewport': {'northeast': {'lat': 49.2515095802915, 'lng': -122.9996326197085}, 'southwest': {'lat': 49.2488116197085, 'lng': -123.0023305802915}}}, 'place_id': 'ChIJO43GEiB3hlQR-QY96UgF0jQ', 'plus_code': {'compound_code': '7X2X+3J Burnaby, BC, Canada', 'global_code': '84XR7X2X+3J'}, 'types': ['street_address']}], 'status': 'OK'}
+                                        if(json3.status && json3.status=="OK") {
+                                            var lat = json3.results[0].geometry.location.lat;
+                                            var lon = json3.results[0].geometry.location.lng;
+                                            var marker = waypoint(lat,lon,0,1);
+                                            var infowindow = new google.maps.InfoWindow({
+                                                content: clicktext
+                                            });
+                                            marker.addListener('click', function() {
+                                                if(openinfowindow!=null){
+                                                    openinfowindow.close();
+                                                    openinfowindow=null;
+                                                }
+                                                infowindow.open(oGoogleMap, marker);
+                                                openinfowindow = infowindow;
+                                            });
+                                            //console.log(lat+  " " +lon);
+                                            //position = new google.maps.LatLng(lat, lon);
+                                            coordinatesinview.push({ lat: lat, lng: lon });
+                                            markersinview.push(marker);
+                                            if(fittimeout==0)
+                                                fittimeout = window.setTimeout(function() {
+                                                    fit(coordinatesinview);
+                                                    fittimeout=0
+                                                },3000); //more time delay before zooming
+
+                                            memberDiv.marker=marker;
+                                            memberDiv.addEventListener("mouseover", startbounceHandler);
+                                            memberDiv.addEventListener("mouseout", stopbounceHandler);
+
+                                            const filename=memberJSON.filename;
+                                            registerMemberEvent({event:"link",filename:filename,ui:memberDiv,link:null});
+                                        }
+                                    });
+                            } finally {
+                                container2.lock=false;
+                            }
+                        };
+                        if(json2a!=null)
+                            queued([json2a,queued,stateA]);
+                    });
+                }
+                container.appendChild(buildAddbar("Can't find yourself in the list?  Register.", function(event) {
+                    var destination2 = document.getElementById("destination").current;
+                    if(destination2!=null)
+                        location.href="registermemberwithdestcgi.py?dest=" + encodeURIComponent(destination2.json.filename);
+                        //console.log(destination2.json.filename);
+                    else
+                        console.error("Add member button, cannot get the currently selected destination");
+                }));
+            });
+        }
+        function registerMemberEvent(e){ //{event:null,filename:filename,ui:memberDiv,link:null}
+            const filename=e.filename;
+            //this should be called from 4 places 1) when memberui is created 2) when memberlinkui is created
+            //3) when member is dropped in pool  4) when member is x-out of pool
+            // 3/4 is a link attempt, but only succeeds if enough information exists
+            // the .link field is very volatile, as the fields are removed with x-out or <-back
+            var found = memberreference.find(s => s.filename==filename);
+            if(!found) {
+                found = {filename:e.filename, ui:e.ui, link:e.link, counter:1};
+                memberreference.push(found);
+            } else {
+                found.counter++;
+                if(!found.ui && e.ui) found.ui=e.ui;
+                if(!found.link && e.link) found.link=e.link;
+                if(found.link && !e.link && e.event=="unlink") found.link=e.link;
+            }
+            if(found.ui) {
+                if(e.event=="link" && found.link)
+                    found.ui.querySelectorAll("span")[0].className="strikeoutMemberUI";
+                else if(e.event=="unlink" && !found.link)
+                    found.ui.querySelectorAll("span")[0].className="";
+                if(found.link) {
+                    if(e.event=="link")
+                        found.link.marker=found.ui.marker;
+                    else if(e.event=="unlink")
+                        found.link.marker=null;
+                }
+            }
+        }
+        function buildMemberUI(json) {
+            // {"type" :"member","filename" :"filename","email" :"email","displayname" :"display name","address" :"address","hascar" :"hascar","destinationfile" :"destination"}
+            var name=json.name;
+            var url=json.url;
+            var geocode=json.geocode;
+
+            var container = document.createElement("div");
+            container.className="memberUI";
+
+            if(json.hascar.toUpperCase()=="Y") {
+                var img = document.createElement("img");
+                container.appendChild(img).src="car32.png";
+                img.draggable=false;
+            }
+            var span=container.appendChild(document.createElement("span"));
+            span.appendChild(document.createTextNode(json.displayname));
+            span.appendChild(document.createElement("br"));
+            span.appendChild(document.createTextNode(json.email));
+            span.appendChild(document.createElement("br"));
+            span.appendChild(document.createTextNode(json.address));
+
+            container.json=json;
+
+            container.addEventListener("dragstart", drag);
+            container.addEventListener("dragend", dragend);
+            container.draggable=true;
+
+            return container;
+        }
+        function closeapp2() {
+            var container = document.getElementById("app2");
+            container.style.display="none";
+        }
+
+
+        function startup() {
+            loadDestination();
+        }
+    </script>
+    <script>
+        <!--https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop-->
+        function allowDrop(ev) { //when over
+            ev.preventDefault();
+            this.className="poolUIdrag";
+        }
+
+        function drag(ev) { //start
+            ev.dataTransfer.setData("text/plain",JSON.stringify(ev.target.json));
+        }
+        function dragend(ev) { //end
+            ev.target.className="memberUI";
+            //pools = document.getElementById("pools");
+        }
+
+        function drop(ev) { //drop
+            ev.preventDefault();
+            if(this.className=="poolUI" || this.className=="poolUIdrag") {
+                var pooljson=this.json;
+
+                this.className="poolUI";
+                var json = JSON.parse(ev.dataTransfer.getData("text/plain"));
+                console.log("Member Dropped");
+                console.log(json);
+                if(!addMemberToPool(json,this))
+                    return;
+
+                if(this.replaceme!=null) {
+                    this.replaceme.remove();
+                    this.replaceme==null;
+                }
+                this.appendChild(buildLinkUI(json));
+
+                const filename=json.filename;
+                registerMemberEvent({event:"link",filename:filename,ui:null,link:this});
+            }
+        }
+
+        function enterDrop(ev) { //when enter
+            //console.log(this);
+            //if(this.className=="poolUI")
+            //    this.className="poolUIdrag";
+        }
+        function leaveDrop(ev) { //when leave
+            //console.log(this);
+            if(this.className=="poolUIdrag")
+                this.className="poolUI";
+        }
+    </script>
+</head>
+<body onload="startup()">
+    <div id='map'></div>
+    <script>
+    var markersinview = [];
+    var coordinatesinview = [];
+    var openinfowindow = null;
+    var pathsinview = [];
+    var oGoogleMap;
+    function callbackFromGoogle() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14,
+            center: { lat: 49.248499, lng: -123.001375 },
+            mapTypeId: 'roadmap'
+        });
+        oGoogleMap=map;
+
+        //m = marker({ lat: 49.248499, lon: -123.001375, desc:"BCIT" })
+        //m.setMap(map);
+    }
+    </script>
+    <script async defer src='https://maps.googleapis.com/maps/api/js?key=@replacemewithgoogleapikey/&callback=callbackFromGoogle'></script>
+    <script>
+
+    fittimeout=0
+    function fit(markers) {
+        var bounds = new google.maps.LatLngBounds();
+        for(var i=0; i<markers.length; i++) {
+            bounds.extend(markers[i]);
+        }
+        oGoogleMap.fitBounds(bounds);
+    }
+
+    var colorcounter=0
+    function drivingpath(coordinatelist) {
+        colorcycle = ['red','blue','pink','yellow','purple','green','ltblue','orange'];
+        current=colorcycle[colorcounter++%colorcycle.length];
+        var map = oGoogleMap;
+
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+        const waypts = [];
+
+        coordinatelist.forEach(s=>waypts.push({location: s,stopover: true,}));
+        const first = coordinatelist[0];
+        const last = coordinatelist[coordinatelist.length-1];
+        waypts.shift();
+        waypts.length--;
+        directionsRenderer.setOptions({
+          polylineOptions: {
+            strokeColor: current
+          }
+        });
+        directionsService.route({
+            origin: first,
+            destination: last,
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING,
+        },(response, status) => {
+            if (status === "OK" && response) {
+                directionsRenderer.setDirections(response);
+                const route = response.routes[0];
+                //const summaryPanel = document.getElementById("directions-route");
+                //summaryPanel.innerHTML = "";
+
+                // For each route, display summary information.
+                //for (let i = 0; i < route.legs.length; i++) {
+                //    const routeSegment = i + 1;
+                //    summaryPanel.innerHTML +=
+                //    "<b>Route Segment: " + routeSegment + "</b><br>";
+                //    summaryPanel.innerHTML += route.legs[i].start_address + " to ";
+                //    summaryPanel.innerHTML += route.legs[i].end_address + "<br>";
+                //    summaryPanel.innerHTML +=
+                //    route.legs[i].distance.text + "<br><br>";
+                //}
+            } else {
+                window.alert("Directions request failed due to " + status);
+            }
+        });
+        return directionsRenderer;
+    }
+
+    function straightpath(coordinatelist) {
+        var colorcycle = ['red','blue','pink','yellow','purple','green','ltblue','orange'];
+        var current=colorcycle[colorcounter++%colorcycle.length];
+        const map = oGoogleMap;
+
+        var feihl1 = new google.maps.Polyline({ path:coordinatelist, geodesic:false, strokeColor:current, strokeOpacity:0.8, strokeWeight:5, icons:[{icon:{path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},offset:"100%",}] });
+        feihl1.setMap(map);
+        return feihl1;
+    }
+
+    function mstpath(coordinatelist) {
+        var map = oGoogleMap;
+        var feihl1 = new google.maps.Polyline({    path: coordinatelist,    geodesic: true,    strokeColor: '#000066',    strokeOpacity: 0.5,    strokeWeight: 1});
+        feihl1.setMap(map);
+        return feihl1;
+    }
+    function waypoint(lat,lon,style,color) {
+        var map = oGoogleMap;
+        bluedot = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        pinkdot =  "http://maps.google.com/mapfiles/ms/icons/pink-dot.png";
+        yellowdot=  "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+        purpledot = "http://maps.google.com/mapfiles/ms/icons/purple-dot.png";
+        greendot = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+        ltbluedot = "http://maps.google.com/mapfiles/ms/icons/ltblue-dot.png";
+        orangedot = "http://maps.google.com/mapfiles/ms/icons/orange-dot.png";
+        reddot = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        style1 = [bluedot,pinkdot ,yellowdot,purpledot,greendot ,ltbluedot,orangedot,reddot];
+
+        blue = "http://maps.google.com/mapfiles/ms/icons/blue.png";
+        pink =  "http://maps.google.com/mapfiles/ms/icons/pink.png";
+        yellow=  "http://maps.google.com/mapfiles/ms/icons/yellow.png";
+        purple = "http://maps.google.com/mapfiles/ms/icons/purple.png";
+        green = "http://maps.google.com/mapfiles/ms/icons/green.png";
+        ltblue = "http://maps.google.com/mapfiles/ms/icons/ltblue.png";
+        orange = "http://maps.google.com/mapfiles/ms/icons/orange.png";
+        red = "http://maps.google.com/mapfiles/ms/icons/red.png";
+        style2=[blue,pink,yellow,purple,green,ltblue,orange,red];
+
+        ylwpin = "http://maps.google.com/mapfiles/ms/icons/ylw-pushpin.png";
+        bluepin = "http://maps.google.com/mapfiles/ms/icons/blue-pushpin.png";
+        grnpin = "http://maps.google.com/mapfiles/ms/icons/grn-pushpin.png";
+        ltbluepin = "http://maps.google.com/mapfiles/ms/icons/ltblu-pushpin.png";
+        pinkpin = "http://maps.google.com/mapfiles/ms/icons/pink-pushpin.png";
+        purplepin = "http://maps.google.com/mapfiles/ms/icons/purple-pushpin.png";
+        redpin = "http://maps.google.com/mapfiles/ms/icons/red-pushpin.png";
+        style3=[ylwpin,bluepin,grnpin,ltbluepin,pinkpin,purplepin,redpin];
+        styles=[style1,style2,style3];
+        pushpin=styles[style][color];
+
+        var aaqbq2 = new google.maps.Marker({  position: { lat: lat, lng: lon},  label: ' ',  icon: { url: pushpin },   animation: google.maps.Animation.DROP,   map: map});
+        return aaqbq2;
+    }
+    function marker(param) {
+            var latitude = param.lat;
+            var longitude = param.lon;
+            var description = param.desc;
+            var mapref = oGoogleMap;
+
+            if(mapref!=null)
+            {
+                //var marker = new google.maps.Marker({
+                //                    position: { lat: latitude, lng: longitude },
+                //                    label: ' ',
+                //                    map: mapref});
+                var marker = waypoint(latitude, longitude);
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: description
+                });
+                marker.addListener('click', function() {
+                    if(openinfowindow!=null){
+                        openinfowindow.close();
+                        openinfowindow=null;
+                    }
+                    infowindow.open(mapref, marker);
+                    openinfowindow = infowindow;
+                });
+                return marker;
+            } else {
+                //how are you going to return a marker here?
+                //mapinitdata[i] = param;
+                return null;
+            }
+        }
+        function startbounceHandler(e) {
+            var target = this;  //e.currentTarget;
+            //make it bounce for controls that have a marker
+            if(target.marker!=null)
+                target.marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+        function stopbounceHandler(e) {
+            var target = this;  //e.currentTarget;
+
+            //make it stop bouncing
+            if(target.marker!=null)
+                target.marker.setAnimation(null);
+        }
+    </script>
+
+
+    <div class="app">
+        <div class="border">
+            <h1>Car Pool Mashup</h1>
+            <div class="section" id="destination">Getting Destinations...</div>
+            <div class="section" id="pools"></div>
+        </div>
+    </div>
+    <div class="app2" id="app2">
+        <div class="border">
+            <div>
+            <button onclick="closeapp2()" class="icobtn">X</button>
+            Members
+            </div>
+            <div class="section" id="members"></div>
+        </div>
+    </div>
+
+
+</body>
+</html>

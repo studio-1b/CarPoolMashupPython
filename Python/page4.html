@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to the Car Pool Mash-up</title>
+</head>
+<body>
+    <iframe src="todaycgi.py" style="width:100%;height:50px;"></iframe>
+
+    <p>Then I added a handler for files ending with *cgi.py.  Now it can run programs to create HTML or supported content on the fly.
+    1 x python file
+    1 x todaycgi.py to see it work
+
+    <p>Then I decided to copy and paste some html from a Google maps implementation I did for fun a few years back.
+    1x HTML file *.htm
+
+    <p>Then I decided, wouldn't it be great to be able to load people and paths to the map
+    2x json files *.json
+
+    <p>Then I decided, why can't I create the json files on the fly
+    1x file management component
+    2x HTML registration forms *.html
+    2x POST handler *cgi.py
+    and a tribbles worth of json files for people, destinations and pools
+
+    <i>At this point, a more responsible programmer would ask themselves about something abstractly called separation of concerns.</i>
+
+    <p>Then I decided, wouldnt it be great to have all the json files indexed according to their type
+    3x json of arrays of filenames
+
+    <p>Then I realized I forgot markers on google maps have to have lat/long...
+    now 1x python file to pull coordinates from google
+
+    <p>Now It's trivial to order the car pool destinations, to be optimal if less than 10.
+    So now 1x python file to organize the paths
+
+    <p>Now I realize that I'm going to need a easier interface to provide with my application
+     I modify a file and add menu and menus and menues and when you think your done, more menues.
+    probably 1700 lines of code
+    the http server needs to be multithreading,so another 20 lines.  No, I don't need to worry about concurrency.
+    There is nothing shared between requests, that I need to manage.  If I wrote logs of HTTP request, then I have
+    to manage that, as they all write to the same log file.  But I didn't.  50lines of code saved.
+
+    <p>at this point separation of concerns is becoming a real issue as the radiation from the cell phone tower nearby
+        keeps my brainwaves scrambled, and I'm having trouble keeping track of how many places
+        I cut and pasted the same code everywhere.
+        1x python to distill duplicated code, into a readable outline, hiding the mess underneath.
+        But that is now like 10x python files I have to remove the old code.  Lots and lots of debugging
+        saved maybe 200 lines of code, but it's a lot more readable now, until you get to the lower layers.
+    <p>I kept the Google Maps javascript application out of the discussion so far bc it's a python course.
+        But I assure you, there is as much javascript in the html file, to read and manage all those json files,
+        as there are python lines of code to create them.
+
+    <br><br>
+    <a href="allmembersmapcgi.py"> --> </a>
+</body>
+</html>

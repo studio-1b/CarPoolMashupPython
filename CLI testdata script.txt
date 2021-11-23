@@ -1,0 +1,298 @@
+Make sure env var exists GOOGLE_GEOCODE_API_KEY
+Make sure env var exists GOOGLE_MAP_JS_API_KEY
+Make sure destindex.json exists (though I might have fixed this)
+If running from linux command line, it needs to be run w sudo -E python3 main.py 
+  b/c needs ability to open listening port, in well-known range... 8080 and no compaints
+echo ${GOOGLE_GEOCODE_API_KEY:30}
+echo ${GOOGLE_MAP_JS_API_KEY:30}
+
+Press A after entering Menu (Destination List Menu)
+========================================
+a
+BCIT Main Burnaby
+3700 Willingdon Avenue,Burnaby
+a
+BCIT Downtown Campus 
+555 Seymour St, Vancouver
+a
+BCIT Marine Campus
+265 W Esplanade,North Vancouver 
+a
+BCIT Aerospace Technology Campus
+3800 Cessna Dr,Richmond
+a
+BCIT Annacis Island Campus
+1608 Cliveden Ave,Delta
+a
+BCIT Centre for Applied Research and Innovation (CARI)
+4355 Mathissi Place, Burnaby
+
+Searching for (BCIT Main Burnaby) (/)
+Then Destination Menu (1)
+Then Members(m)
+Then Add(a)
+========================================
+/
+BCIT Main Burnaby
+1
+m
+a
+604@bcit.ca
+Steven Johnson
+2626 Pr Edward Vancouver BC V5T 0A3
+N
+a
+525@outlook.com
+James M Smith
+3449 22nd Ave W Vancouver BC V6S 1J1
+Y
+a
+524@outlook.com
+D E Williams
+1385 Draycott Rd 420 North Vancouver BC V7J 3K9
+N
+a
+327@yahoo.com
+GD Johnson
+4455 Trafalgar St 33 Vancouver BC V6L 2M7
+Y
+a
+1169@outlook.com
+S Tate.Smith
+2445 3rd Ave W 1001 Vancouver BC V6K 4K6
+N
+a
+8826@yahoo.com
+G D Johnson
+3316 Carriage Crt Coquitlam BC V3E 3G6
+Y
+a
+9770@outlook.com
+R Smith
+2222 Edinburgh St 306 New Westminster BC V3M 2Y1
+N
+a
+3899@outlook.com
+B&c Smith
+7943 Edmonds St Burnaby BC V3N 1C1
+Y
+a
+988@outlook.com
+M Johnson
+6820 Dumfries St Vancouver BC V5P 3B9
+N
+a
+TLSmith@yahoo.com
+T L Smith
+312 Monteray Ave North Vancouver BC V7N 3E6
+Y
+a
+wd@gmail.com
+Wei Dong
+Hilton Vancouver Metrotown, 6083 McKay Ave, Burnaby
+N
+a
+ak@gmail.com
+A Kumar
+Executive Suites Hotel & Conference Center, 4201 Lougheed Hwy, Metro Vancouver, Burnaby
+N
+a
+hp@gmail.com
+H Pabon
+Holiday Inn Express Vancouver.Metrotown Burnaby), 4405 Central Blvd, Burnaby
+N
+a
+km@gmail.com
+Kulwant Mahairhu
+Best Western PLUS Burnaby Hotel, 5411 Kingsway, Burnaby
+N
+a
+ls@gmail.com
+Leigh Su
+Delta Hotels by Marriott Burnaby Conference Centre, 4331 Dominion St, Burnaby
+N
+a
+mng@gmail.com
+M Ng
+Accent Inns Burnaby,3777 Henning Dr, Burnaby
+N
+a
+sw@gmail.com
+S Wong
+Element Vancouver Metrotown, 5988 Willingdon Ave, Burnaby
+N
+a
+jh@gmail.com
+J Hourie
+401 Inn, 2950 Boundary Rd, Burnaby
+N
+a
+mm@gmail.com
+M Milfee
+Lily's lovely little house, 3749 Burke St, Burnaby
+N
+a
+zl@gmail.com
+Zhi Li
+Happy Day Inn, 7330 6th St, Burnaby
+N
+a
+jzmail.com
+J Zhao
+6433 Kisbey Ave, Burnaby
+N
+a
+af@gmail.com
+A Ferreira
+301-6540 Burlington Ave, Burnaby
+Y
+a
+sc@gmail.com
+S Callaghan
+4843 Chesham Ave, Burnaby
+N
+a
+rc@gmail.com
+Ronecia Capangpangan
+309-9890 Manchester Dr, Burnaby
+Y
+a
+fb@gmail.com
+F Barbosa
+407-6391 Waltham Ave, Burnaby
+N
+a
+rv@gmail.com
+Rosita Vicente
+301-5645 Barker Ave, Burnaby
+Y
+a
+nl@gmail.com
+John Doe
+206-6677 Sussex Ave, Burnaby
+N
+
+Search for Member from member list (/), goto menu(1) and update address(C) 
+then (q)uit member menu, (q)uit member list menu
+====================================
+/
+mm@gmail.com
+1
+c
+
+
+76 45th Ave E, Vancouver
+
+q
+q
+
+Enter Pool Menu (p) and add 6 members to pool
+then quit pool menu
+============================
+p
+a
+ak@gmail.com
+hp@gmail.com
+km@gmail.com
+ls@gmail.com
+wd@gmail.com
+sw@gmail.com
+q
+q
+
+Search for downtown campus
+Adding members
+===============================
+/
+BCIT Downtown Campus 
+1
+m
+a
+FrankAdornato@gmail.com
+Frank Adornato
+4507 Dumfries St, Vancouver
+y
+a
+JAdragna@gmail.com
+J Adragna
+3256 44th Ave E, Vancouver
+y
+a
+ParisaAdrangi@gmail.com
+Parisa Adrangi
+2201-388 Drake St, Vancouver
+y
+a
+JAdrian@gmail.com
+J Adrian
+298 22nd Ave E, Vancouver
+y
+a
+JakeAdrian@gmail.com
+Jake Adrian
+336 41 1st Ave E, Vancouver
+y
+a
+JohnAdrian@gmail.com
+John J Adrian
+2237 33rd Ave W, Vancouver
+y
+a
+QAdrian@gmail.com
+Q Adrian
+5909 Trafalgar St, Vancouver
+y
+a
+WesAdrian@gmail.com
+Wes Adrian
+2773 Alamein Ave, Vancouver
+y
+a
+ZarcoAdriana@gmail.com
+Zarco S Adriana
+2698 4th Ave W, Vancouver
+y
+a
+LAdriano@gmail.com
+L Adriano
+5288 30 Melbourne St, Vancouver
+y
+a
+VAdvaney@gmail.com
+V Advaney
+3202-1408 Strathmore Mews, Vancouver
+y
+a
+ElissaAeng@gmail.com
+Elissa Aeng
+806-5470 Ormidale St, Vancouver
+y
+a
+MAeschlimann@gmail.com
+M Aeschlimann
+1742 3rd Ave E, Vancouver
+y
+q
+
+Adding pool
+===============
+p
+a
+WesAdrian@gmail.com
+ZarcoAdriana@gmail.com
+LAdriano@gmail.com
+VAdvaney@gmail.com
+
+
+a
+ElissaAeng@gmail.com
+MAeschlimann@gmail.com
+FrankAdornato@gmail.com
+ParisaAdrangi@gmail.com
+
+
+
+q
+q
+
+

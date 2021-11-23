@@ -1,0 +1,89 @@
+body {
+    background-color:black;
+    text-align:center;
+}
+div.container {
+    border-radius: 4px;
+    background-color:white;
+    padding: 20px;
+    margin: 20px;
+    max-width:500px;
+}
+h1 {
+    font-weight:bold;
+    display:block;
+    text-align:left;
+    font-family:Arial;
+    text-transform: capitalize;
+}
+h1::first-letter {
+    font-size:150%;
+}
+div.field {
+    border-radius: 4px;
+    background-color:silver;
+
+    display:block;
+    padding:4px;
+    padding-top:25px;
+    padding-right:50px;
+
+    text-align:left;
+
+    margin-bottom:20px
+}
+
+input[type=text] {
+    width:99%;
+    font:40px Arial;
+
+    background-color:silver;
+    border:0px solid silver;
+}
+input[type=text]:focus {
+    width:99%;
+    font:40px Arial;
+
+    background-color:silver;
+    border:0px solid silver;
+    outline:none;
+}
+input[type=submit] {
+    border-radius: 8px;
+    border-color:white;
+    border:0x solid white;
+    background-color:blue;
+    padding: 16px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin: 16px;
+
+    color:white;
+    font-size:16px;
+}
+
+form {
+  display: block;
+}
+
+label {
+  font:20px Arial;
+  display: block;
+  transform: translate(0, -2.75rem);
+}
+
+
+@supports (not (-ms-ime-align:auto)) {
+    label {
+      color: #999;
+      transform: translate(0.25rem, -2.0rem);
+      transition: all 0.2s ease-out;
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label {
+      color: #111;
+      transform: translate(0, -4.15rem);
+      font-size:8pt;
+    }
+}

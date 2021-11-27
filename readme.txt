@@ -21,9 +21,11 @@ Installation notes:
     The API keys need
         distance matrix
         geocoding
+    See "sample.mp4" @ 6:40, to see how to check for environment variables on linux
 [X] Test script to insert test data, for demonstration of
     Just cut and paste the keystrokes inside each section, to generate data
         CLI testdata script.txt
+    See "sample.mp4"@ 7:10, to see test data script run 
 [X] To run, just goto Python directory and run "python main.py"
     1) The webserver starts immediately, accessible thru url http://localhost/
     2) The CLI menu paused for 2seconds, before outputting initial menu

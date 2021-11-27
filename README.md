@@ -10,4 +10,5 @@ In hindsight, I would've liked to
 4) server has a .nonblockingstart() method wich creates another thread, creates the socket on it, runs a loop listening
    basically moving socket code from main, to server.
 
-But I'm not working on this project anymore.
+But I don't plan on working on this project in future.  
+It was fun, but there are no Web Servers that accept python as scripting language

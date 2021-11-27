@@ -13,12 +13,17 @@ In hindsight, I would've liked to
 But I don't plan on working on this project in future.  
 It was fun, but there are no Web Servers that accept python as scripting language
 
+
+Images of the Sample app, built on top of platform
+
+Images for Web Console for CarPoolMashup
 ![Web Destination Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Console.png)
 ![Web Pool Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Carpool%20view.png)
 ![Web Members Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Members%20view.png)
-![Web Optimal Car Pool Path View](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Optimal%20Car%20Pool%20view.png)
 ![Web Suggested Car Pool Arrangement View](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Suggest%20view.png)
+![Web Optimal Car Pool Path View](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Optimal%20Car%20Pool%20view.png)
 
+Images for CLI Console for CarPoolMashup
 ![Destination Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Console%20Destination.png)
 ![Member Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Console%20Member.png)
 ![Pool Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Console%20Pool.png)

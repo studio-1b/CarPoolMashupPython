@@ -14,7 +14,7 @@ But I don't plan on working on this project in future.
 It was fun, but there are no Web Servers that accept python as scripting language
 
 
-Images of the Sample app, built on top of platform
+Images of the Sample app, built on top of homemade HTTP platform
 
 Images for Web Console for CarPoolMashup
 ![Web Destination Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Web%20Console.png)

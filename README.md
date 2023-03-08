@@ -3,11 +3,11 @@ BCIT's CISA1360 Final Project in Python
 
 to copy to your linux (or windows, if you have git on windows)
 
-   git clone https://github.com/studio-1b/CarPoolMashupPython.git
+&nbsp;&nbsp;git clone https://github.com/studio-1b/CarPoolMashupPython.git
 
 You need python installed, and be comfortable with command line
 
-  See "CLI testdata script.txt" for instructions to run
+&nbsp;&nbsp;See "CLI testdata script.txt" for instructions to run
   
 BTW: "readme.txt" has surpisingly useless data.  I was using it as project task list.
 

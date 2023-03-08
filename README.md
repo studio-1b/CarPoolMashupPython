@@ -1,7 +1,9 @@
 # CarPoolMashupPython
 BCIT's CISA1360 Final Project in Python
 
-See readme.txt for instructions to run
+See "CLI testdata script.txt" for instructions to run
+  
+"readme.txt" has surpisingly useless data
 
 In hindsight, I would've liked to 
 1) have the constructor of request, take the incoming tcp connection

@@ -1,12 +1,37 @@
-Make sure env var exists GOOGLE_GEOCODE_API_KEY
-Make sure env var exists GOOGLE_MAP_JS_API_KEY
-Make sure destindex.json exists (though I might have fixed this)
-If running from linux command line, it needs to be run w sudo -E python3 main.py 
-  b/c needs ability to open listening port, in well-known range... 8080 and no compaints
-echo ${GOOGLE_GEOCODE_API_KEY:30}
-echo ${GOOGLE_MAP_JS_API_KEY:30}
+Directions to run CarPoolMashup  (further below is test data)
+=================================
 
-Press A after entering Menu (Destination List Menu)
+Goto Google Cloud and get API Key, and assign API key with
+  Directions API
+  Distance Matrix API
+  Geocoding API
+  Maps JavaScript API
+Copy key, and add to top of .bashrc
+  export GOOGLE_GEOCODE_API_KEY="API-key"
+  export GOOGLE_MAP_JS_API_KEY="API-key"
+Make sure env var exists GOOGLE_GEOCODE_API_KEY
+  echo ${GOOGLE_GEOCODE_API_KEY:30}
+Make sure env var exists GOOGLE_MAP_JS_API_KEY
+  echo ${GOOGLE_MAP_JS_API_KEY:30}
+  
+This program doesn't run as a daemon/server.  It needs to be started manually.
+If running from linux command line, it needs to be run w 
+  sudo -E python3 main.py 
+root access is needed b/c python ability to open listening port 80
+-E gives root, your environment variables
+
+if you use port 8080, you will not need root access
+  python3 main.py 80
+
+
+Below are lines you can use paste into CLI,
+to create some data to play with.
+
+Copy lines between "==="
+You should be in car pool menu, and paste.
+Explanation: A is to enter (A)dd Destination
+             The rest is destination data
+             then repeat
 ========================================
 a
 BCIT Main Burnaby
@@ -26,11 +51,15 @@ BCIT Annacis Island Campus
 a
 BCIT Centre for Applied Research and Innovation (CARI)
 4355 Mathissi Place, Burnaby
+========================================
 
-Searching for (BCIT Main Burnaby) (/)
-Then Destination Menu (1)
-Then Members(m)
-Then Add(a)
+Copy lines between "==="
+You should be in car pool menu, and paste.
+Explanation: / is to Search for data entered above
+             m to enter members menu
+             a to add member
+             The rest is member data
+             then repeat add
 ========================================
 /
 BCIT Main Burnaby
@@ -171,9 +200,16 @@ nl@gmail.com
 John Doe
 206-6677 Sussex Ave, Burnaby
 N
+====================================
 
-Search for Member from member list (/), goto menu(1) and update address(C) 
-then (q)uit member menu, (q)uit member list menu
+Copy lines between "==="
+You should be in "Member list management MENU for [ BCIT Main Burnaby ]" menu, 
+and paste.
+Explanation: / is to Search for member entered above
+             c is to change the data
+
+             The rest is member data
+             then exit into parent menu
 ====================================
 /
 mm@gmail.com
@@ -186,8 +222,15 @@ c
 q
 q
 
-Enter Pool Menu (p) and add 6 members to pool
-then quit pool menu
+============================
+
+Copy lines between "==="
+You should be in "Car Pool MENU for[ BCIT Main Burnaby ]" menu, 
+and paste.
+Explanation: p is to manage pools
+             a is to create pool
+             The rest is entering emails of people in pool
+             then exit into parent menu
 ============================
 p
 a
@@ -200,8 +243,15 @@ sw@gmail.com
 q
 q
 
-Search for downtown campus
-Adding members
+===============================
+
+Copy lines between "==="
+You should be in car pool menu, and paste.
+Explanation: / is to Search for data entered above
+             m to enter members menu
+             a to add member
+             The rest is member data
+             then repeat add
 ===============================
 /
 BCIT Downtown Campus 
@@ -274,7 +324,14 @@ M Aeschlimann
 y
 q
 
-Adding pool
+===============
+
+Copy lines between "==="
+You should be in "Car Pool MENU for[ BCIT Downtown Campus  ]" menu, and paste.
+Explanation: p is to enter car pool management
+             a to add car pool
+             The rest is adding member email to carpool
+             then repeat add
 ===============
 p
 a
@@ -296,3 +353,22 @@ q
 q
 
 
+=================
+
+The above should create enough test data and you can reload the map
+  http://localhost/allmembersmapcgi.py
+
+If you do not see "Best Path for Pool" group on map
+  goto "View Car (P)ool Group" > [Group]
+    then "Refresh Distance (M)atrix"
+    then "Recalculate (P)ath"
+  refresh map and check box should be there to show best order
+  to drop everyone off from BCIT
+
+If you do not see "Suggested Pools on map" checkbox on map
+  goto "View Car (P)ool Group" > [Group]
+    then "Refresh Distance (G)eocode"
+    then "Refresh (S)panning Tree"
+  refresh map and check box should be there to show
+  suggestions on how to divide everyone into 4 person car pools
+  

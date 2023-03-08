@@ -1,9 +1,14 @@
 # CarPoolMashupPython
 BCIT's CISA1360 Final Project in Python
 
-See "CLI testdata script.txt" for instructions to run
+to copy to your linux (or windows, if you have git on windows)
+  git clone https://github.com/studio-1b/CarPoolMashupPython.git
+
+You need python installed, and be comfortable with command line
+  See "CLI testdata script.txt" for instructions to run
   
-"readme.txt" has surpisingly useless data
+BTW: "readme.txt" has surpisingly useless data.  I was using it as project task list.
+
 
 In hindsight, I would've liked to 
 1) have the constructor of request, take the incoming tcp connection

@@ -22,4 +22,4 @@ if [ $IS_BUILD_MISSING -ne 0 ]; then
     exit
 fi
 
-docker run -p 80:8080 carpool-mashup
+docker run -dp 80:8080 carpool-mashup

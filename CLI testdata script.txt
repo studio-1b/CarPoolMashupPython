@@ -17,11 +17,11 @@ Make sure env var exists GOOGLE_MAP_JS_API_KEY
 This program doesn't run as a daemon/server.  It needs to be started manually.
 If running from linux command line, it needs to be run w 
   sudo -E python3 main.py 
-root access is needed b/c python ability to open listening port 80
+root access is needed b/c python needs ability to open listening port 80
 -E gives root, your environment variables
 
 if you use port 8080, you will not need root access
-  python3 main.py 80
+  python3 main.py 8080
 
 
 Below are lines you can use paste into CLI,

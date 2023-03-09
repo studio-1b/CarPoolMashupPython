@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1
+
+FROM python:3.8-slim-buster
+RUN pip install requests
+
+EXPOSE 8080
+
+ADD Python/* .
+
+ENV GOOGLE_MAP_JS_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
+ENV GOOGLE_GEOCODE_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
+
+
+
+#WORKDIR /var/CarPoolMashup
+
+#COPY requirements.txt requirements.txt
+#RUN pip3 install -r requirements.txt
+
+#COPY ../Python/* .
+
+CMD [ "python3", "main.py", "8080"]

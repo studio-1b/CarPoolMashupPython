@@ -5,6 +5,7 @@ import os
 import threading
 import subprocess
 import platform
+import requests   #native python HTTP request maker (not custom receiver, like below)
 from request import HttpRequest
 from server import HttpServer
 from response import HttpResponse
@@ -17,6 +18,12 @@ from debugging import debugging
 #from googleproxy import googleproxy
 #from heldkarpe import heldkarpe
 from carpoolrules import *
+
+def make_request(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+    	return response.text
+    return None
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -1151,6 +1158,11 @@ def menu():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    if "USER" in os.environ:
+        print("Running as:")
+        print(os.environ["USER"])
+        print()
+
     thr = threading.Thread(target=threadedServer, args=(), kwargs={})
     thr.start()
 
@@ -1168,6 +1180,12 @@ if __name__ == '__main__':
     running=False
     if globalsocket!=None:
         try:
+            # sending last request, to unblock tcp wait in server thread
+            startup = config(sys.argv)
+            if startup.listeningPort == 80:
+                make_request("http://localhost")
+            else:
+                make_request("http://localhost:" + str(startup.listeningPort))
             globalsocket.close()
         except Exception as ex:
             print("Expected error received trying to close socket...")

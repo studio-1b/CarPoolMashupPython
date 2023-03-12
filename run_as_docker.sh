@@ -22,4 +22,6 @@ if [ $IS_BUILD_MISSING -ne 0 ]; then
     exit
 fi
 
-docker run -p 80:8080 carpool-mashup
+docker run -itp 80:8080 carpool-mashup
+#docker run  --restart unless-stopped -i -tdp 80:8080 carpool-mashup   # restart on boot
+#press ^p^q to detach docker interactive console to carpool

@@ -188,7 +188,8 @@ class ParamikoServer(paramiko.ServerInterface):
         print("Got a connection!")
 
         try:
-            print("Client is ", socket.getfqdn(""))
+            self.servername=socket.getfqdn("")
+            print("Server is ", self.servername)
     
             # this module is necessary for the implementation below:
             #   pip install python-gssapi
@@ -253,6 +254,7 @@ class ParamikoServer(paramiko.ServerInterface):
 #courtesy of robey pointer
 def sampleGreetHandler(server, e):
     t,chan = e
+    chan.send("\r\n\r\n" + server.servername)
     chan.send("\r\n\r\nWelcome to my dorky little BBS!\r\n\r\n")
     chan.send(
         "We are on fire all the time!  Hooray!  Candy corn for everyone!\r\n"

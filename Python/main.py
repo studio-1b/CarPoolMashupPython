@@ -19,6 +19,10 @@ from debugging import debugging
 #from heldkarpe import heldkarpe
 from carpoolrules import *
 
+from paramikoIO import ParamikoIO
+from paramikoServer import ParamikoServer
+
+
 def make_request(url):
     response = requests.get(url)
     if response.status_code == 200:
@@ -44,22 +48,40 @@ class config:
         self.listeningPort = 80
         self.hostedFilesPath = "."
         self.message = None
+        self.sshdPort = None
 
         l = len(arg)
-        if l == 2:
+        if l >= 2:
             try:
                 self.listeningPort = int(arg[config.index_port])
                 if 1 <= self.listeningPort <=65535:
                     self.message = "Enter port number between 0 and 65535"
             except ValueError:
                 self.message = "Port number must be integer"
-        if l == 3:
+        if l >= 3:
             try:
-                self.hostedFilesPath = arg[config.hostedFilesPath]
+                self.hostedFilesPath = arg[config.index_path]
                 if not os.path.exists(self.hostedFilesPath):
                     self.message = "Cannot verify [" + self.hostedFilesPath + "] exists"
             except ValueError:
                 self.message = "Something went wrong when checking directory path where files are hosted"
+        for i in range(l):
+            # sshd port starts with -ssh
+            sw=arg[i]
+            if sw=="-ssh":
+                self.sshdPort=22
+                break
+            elif sw.startswith("-ssh:"):
+                port=sw[5:]
+                if not str.isnumeric(port):
+                    self.message="The SSH listening port should be numeric"
+                else:
+                    self.sshdPort = int(port)
+                    if 1 <= self.sshdPort <=65535:
+                        self.message = "Enter sshd port number between 0 and 65535"
+                break
+
+
 
 def threadedClient(server,conn,address,handlerlist):
     buffersize = 512
@@ -1156,6 +1178,52 @@ def menu():
     return choices[selection]
 
 
+
+def carpoolSshdGreetHandler(server, e):
+    t,chan = e
+    chan.send("\r\n\r\n" + server.servername)
+    chan.send("\r\n\r\nThis is the SSH control for Carpool Mashup!\r\n\r\n")
+    chan.send("It isn't the best console\r\n")
+    chan.send("But maybe good enough is ok\r\n")
+    chan.send("It only supports single user\r\n")
+
+def clientHandler(server,e):
+    input,output = e
+    #chan = output.ch
+
+    #sshclient=ParamikoIO()
+    sys.stdout=output
+    sys.stdin=input
+    #sys.stderr=output
+
+    #output.write("Type anything and result will be echoed back:\r\n")
+    #output.write("Press ESC to exit\r\n")
+
+    clientstate=currentstate
+    while clientstate!=None:
+        clientstate=clientstate()
+        output.write("\r\n")
+        # New guy always kicks
+        # previous guy.  
+        # Unless we replace print in menus
+
+    #pressed=""
+    #while pressed!=b'\x1b': #esc exits SSH
+    #    pressed = input.read()
+    #    if pressed == b"\r":
+    #        output.write("\r\n")
+    #    output.write(pressed.decode())
+
+    output.write(" Bye Bye.\r\n")
+    output.close()
+
+    sys.stderr.write("client left")
+    #print("client left")
+
+
+
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     if "USER" in os.environ:
@@ -1172,26 +1240,46 @@ if __name__ == '__main__':
     if platform.system()=="Windows":
         subprocess.call(["cmd","/c","start msedge http://localhost"])
 
+
+
+    startuparg = config(sys.argv)
+    if startuparg.sshdPort!=None:
+        sshd=ParamikoServer()
+        sshd.ongreet=carpoolSshdGreetHandler
+        sshd.onclientready=clientHandler
+        sshd.start("",startuparg.sshdPort)
+
+
     print("CLI running...")
     currentstate = menu
     while currentstate!=None:
         currentstate = currentstate()
 
+
     running=False
     if globalsocket!=None:
         try:
             # sending last request, to unblock tcp wait in server thread
-            startup = config(sys.argv)
-            if startup.listeningPort == 80:
+            if startuparg.listeningPort == 80:
                 make_request("http://localhost")
             else:
-                make_request("http://localhost:" + str(startup.listeningPort))
+                make_request("http://localhost:" + str(startuparg.listeningPort))
             globalsocket.close()
         except Exception as ex:
             print("Expected error received trying to close socket...")
         finally:
             print()
             print("web server stopped")
+
+    if startuparg.sshdPort!=None:
+        sshd.stop()
+        try:
+            make_request("http://localhost:" + str(startuparg.sshdPort))
+        except Exception as ex:
+            pass
+        finally:
+            print("SSH stopped")
+
 
     print()
     print("Bye bye!")

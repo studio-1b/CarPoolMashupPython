@@ -24,6 +24,26 @@ if you use port 8080, you will not need root access
   python3 main.py 8080
 
 
+
+SSHD notes:
+you can generate your own SSH host key
+  -download putty
+  -run puttygen and generate new 1024bit SSH2 key
+   https://docs.tritondatacenter.com/public-cloud/getting-started/ssh-keys/generating-an-ssh-key-manually/manually-generating-your-ssh-key-in-windows
+  -Export OpenSSH key
+rename to "ssh_host_rsa_key"
+make sure your environment variables (ie. in .bashrc) contain
+  export CARPOOL_SSHD_HOSTKEY_NAMENAME="ssh_host_rsa_key"
+  export CARPOOL_SSH_USER='{"username1":"password1","user2":"pass2","user-n":"pass-n"}'
+start carpool with the sshd port argument
+  python main.py 8080 . -sshd:8022
+you then can connect to console via ssh
+  ssh username1@localhost -p 8022
+
+
+
+------------------------------------------
+
 Below are lines you can use paste into CLI,
 to create some data to play with.
 

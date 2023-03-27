@@ -23,15 +23,16 @@ root access is needed b/c python needs ability to open listening port 80
 if you use port 8080, you will not need root access
   python3 main.py 8080
 
-
+Below contains notes to also enable the SSH server feature to activate SSH access to the console menu
 
 SSHD notes:
+host key identifies your SSH server, and one from code example is hardcoded
 you can generate your own SSH host key
   -download putty
   -run puttygen and generate new 1024bit SSH2 key
    https://docs.tritondatacenter.com/public-cloud/getting-started/ssh-keys/generating-an-ssh-key-manually/manually-generating-your-ssh-key-in-windows
   -Export OpenSSH key
-rename to "ssh_host_rsa_key"
+  -rename to "ssh_host_rsa_key"
 make sure your environment variables (ie. in .bashrc) contain
   export CARPOOL_SSHD_HOSTKEY_NAMENAME="ssh_host_rsa_key"
   export CARPOOL_SSH_USER='{"username1":"password1","user2":"pass2","user-n":"pass-n"}'
@@ -39,7 +40,12 @@ start carpool with the sshd port argument
   python main.py 8080 . -sshd:8022
 you then can connect to console via ssh
   ssh username1@localhost -p 8022
+  ie. ssh jdoe@localhost -p 8022
+      password:foo
 
+
+I stopped working on this branch bc it doesnt work inside docker container
+But there should be enough here, to get you started.
 
 
 ------------------------------------------

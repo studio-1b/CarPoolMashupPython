@@ -1190,6 +1190,8 @@ def carpoolSshdGreetHandler(server, e):
 def clientHandler(server,e):
     input,output = e
     #chan = output.ch
+    sys.stderr.write("Client handler has encrypted channel...\r\n")
+
 
     #sshclient=ParamikoIO()
     sys.stdout=output
@@ -1217,7 +1219,7 @@ def clientHandler(server,e):
     output.write(" Bye Bye.\r\n")
     output.close()
 
-    sys.stderr.write("client left")
+    sys.stderr.write("client disconnected\r\n")
     #print("client left")
 
 
@@ -1241,7 +1243,8 @@ if __name__ == '__main__':
         subprocess.call(["cmd","/c","start msedge http://localhost"])
 
 
-
+    oldin=sys.stdin
+    oldout=sys.stdout
     startuparg = config(sys.argv)
     if startuparg.sshdPort!=None:
         sshd=ParamikoServer()
@@ -1256,6 +1259,8 @@ if __name__ == '__main__':
         currentstate = currentstate()
 
 
+    sys.stdin=oldin
+    sys.stdout=oldout
     running=False
     if globalsocket!=None:
         try:

@@ -34,7 +34,8 @@ import json
 import threading
 
 import paramiko  # https://stackoverflow.com/questions/71368098/creating-python-sshserver
-from paramiko.py3compat import b, u, decodebytes
+from paramikoBobCompat import b, u, decodebytes
+#from paramiko.py3compat import b, u, decodebytes
 from collections import namedtuple
 from paramikoIO import ParamikoIO
 
@@ -176,25 +177,25 @@ class ParamikoServer(paramiko.ServerInterface):
         while self.isrunning:
             try:
                 sock.listen(100)
-                print("Listening for connection ...")
+                sys.stderr.write("Listening for connection ...\r\n")
                 # client, addr = sock.accept()
                 client = sock.accept()
                 if self.onconnect!=None:
                     self.onconnect(client)
             except Exception as e:
-                print("*** Listen/accept failed: " + str(e))
+                sys.stderr.write("*** Listen/accept failed: " + str(e) + "\r\n")
                 traceback.print_exc()
         if self.isrunning:
             self.isrunning=False
-        print("Stopped listening for new connections ...")
+        sys.stderr.write("Stopped listening for new connections ...\r\n")
 
     def connectHandler(self, e):
         client, addr = e
-        print("Got a connection!")
+        sys.stderr.write("Got a connection!\r\n")
 
         try:
             self.servername=socket.getfqdn("")
-            print("Server is ", self.servername)
+            sys.stderr.write("Server is "+ self.servername +"\r\n")
     
             # this module is necessary for the implementation below:
             #   pip install python-gssapi
@@ -208,26 +209,26 @@ class ParamikoServer(paramiko.ServerInterface):
             #    print("(Failed to load moduli -- gex will be unsupported.)")
             #    raise
     
-            print("Host key: " + u(hexlify(self.host_key.get_fingerprint())))
+            sys.stderr.write("Host key: " + u(hexlify(self.host_key.get_fingerprint())) +"\r\n")
             t.add_server_key(self.host_key)
     
             try:
                 t.start_server(server=self)
             except paramiko.SSHException:
-                print("*** SSH negotiation failed.")
+                sys.stderr.write("*** SSH negotiation failed.\r\n")
                 return False
 
             # wait for auth
             chan = t.accept(20)
             if chan is None:
-                print("*** No channel.")
+                sys.stderr.write("*** No channel.\r\n")
                 return False
 
-            print("Authenticated!")
+            sys.stderr.write("Authenticated!\r\n")
 
             self.event.wait(10)
             if not self.event.is_set():
-                print("*** Client never asked for a shell.")
+                sys.stderr.write("*** Client never asked for a shell.\r\n")
                 return False
 
             if self.ongreet!=None:
@@ -240,13 +241,14 @@ class ParamikoServer(paramiko.ServerInterface):
             io2=ParamikoIO(chan)
             e3=Eargs2(io1,io2)
             # open new thread for clientproxy
+            sys.stderr.write("Handing off encrypted channel to handler...\r\n")
             thr = threading.Thread(target=self.onclientready, args=(self,e3,), kwargs={})
             thr.start()
             #self.onclientready(self,e3)
             return True
 
         except Exception as ex:
-            print("*** Caught exception: " + str(ex.__class__) + ": " + str(ex))
+            sys.stderr.write("*** Caught exception: " + str(ex.__class__) + ": " + str(ex) +"\r\n")
             traceback.print_exc()
             try:
                 t.close()

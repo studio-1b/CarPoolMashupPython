@@ -1,16 +1,33 @@
 # syntax=docker/dockerfile:1
 
 FROM python:3.8-slim-buster
-RUN pip install requests
+#FROM debian:buster-slim
+
+RUN apt-get update
+RUN apt-get -y install openssl
+RUN apt-get -y install libssl-dev
+RUN apt-get -y install libffi-dev
+RUN apt-get -y install python3-dev
+RUN apt-get -y install cargo
+RUN apt-get -y install libkrb5-dev
+RUN apt-get -y install pkg-config
+
+RUN pip3 list
+RUN pip3 install requests
+RUN pip3 install cryptography
+RUN pip3 install paramiko[all]
+#RUN pip3 install paramiko.py3compat
+
 
 EXPOSE 8080
+EXPOSE 8022
 
 ADD Python/* .
 
 ENV GOOGLE_MAP_JS_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
 ENV GOOGLE_GEOCODE_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
-
-
+ENV CARPOOL_SSH_USER {"jdoe":"foo"}
+ENV CARPOOL_SSHD_HOSTKEY_NAMENAME test_rsa.key
 
 #WORKDIR /var/CarPoolMashup
 
@@ -19,4 +36,4 @@ ENV GOOGLE_GEOCODE_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
 
 #COPY ../Python/* .
 
-CMD [ "python3", "main.py", "8080"]
+CMD [ "python3", "main.py", "8080", ".", "-ssh:8022"]

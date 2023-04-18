@@ -3,12 +3,12 @@
 FROM python:3.8-slim-buster
 RUN pip install requests
 
-EXPOSE 8080
+EXPOSE 80
 
 ADD Python/* .
 
-ENV GOOGLE_MAP_JS_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
-ENV GOOGLE_GEOCODE_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
+ENV GOOGLE_MAP_JS_API_KEY -
+ENV GOOGLE_GEOCODE_API_KEY -
 
 
 
@@ -19,4 +19,4 @@ ENV GOOGLE_GEOCODE_API_KEY AIzaSyDaCxsGEPsE6RJRP2dwVlLhdXwV6awM74A
 
 #COPY ../Python/* .
 
-CMD [ "python3", "main.py", "8080"]
+CMD [ "python3", "main.py", "80"]

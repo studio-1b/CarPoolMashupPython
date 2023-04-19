@@ -28,10 +28,11 @@ Docker instructions added:
 1) Install docker on Linux
 2) run the script "sudo ./build_docker.sh", to create a container
 3) To see the container, run "docker image ls"
-4) if your port 80 is available, run the script "sudo ./run_as_docker.sh"
-&nbsp;&nbsp;&nbsp;&nbsp;if you want to use a port other than 80, 
-&nbsp;&nbsp;&nbsp;&nbsp;look for 80 in script and change it to what you want,
-&nbsp;&nbsp;&nbsp;&nbsp;BUT leave 8080 alone
+4) run the script "sudo ./run_as_docker.sh", and access http://localhost:8080
+&nbsp;&nbsp;&nbsp;&nbsp;if you want to use a port 80, 
+&nbsp;&nbsp;&nbsp;&nbsp;look for 8080 in script and change it to what you want,
+&nbsp;&nbsp;&nbsp;&nbsp;BUT leave 80 alone 
+&nbsp;&nbsp;&nbsp;&nbsp;(bc it has to match EXPOSE and CMD in dockerfile)
 
 
 

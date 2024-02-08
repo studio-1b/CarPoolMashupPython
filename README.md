@@ -52,3 +52,9 @@ Images for CLI Console for CarPoolMashup
 ![Destination Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Console%20Destination.png)
 ![Member Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Console%20Member.png)
 ![Pool Console](https://raw.githubusercontent.com/studio-1b/CarPoolMashupPython/main/SampleApplicationImages/sample%20intermediate%20level%20html%20app%20-%20CarPoolMashup%20Console%20Pool.png)
+
+# Issues with python program
+
+executing python3 main.py, returns unable to find "requests": run "pip3 install requests"
+
+executing python3 main.py, return "urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with LibreSSL 2.8.3": run "pip install urllib3==1.26.6"

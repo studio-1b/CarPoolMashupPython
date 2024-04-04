@@ -89,14 +89,14 @@ Create a Service
 > [!WARNING]
 > Having a Security Group assignment wrong, will not fail the container startup, but the Security Group is essentially a simple firewall configuration.  And misconfigured, it might block port 80, which is what the carpool container is programmed to start on
 
-After "the service, which is last step" has started, you can find the public IP address at:
-  - Tasks > click task > Network Bindings > external link
+After "the service" (which is last step) has started, you can find the public IP address at:
+  - (In created cluster) > Tasks > click task > Network Bindings > external IPv4 link
 
-Copy and paste into your browser to trial the Carpool application
+Copy and paste (the IP address above) into your browser to trial the Carpool application
   - Test on your browser, at your liesure
 
-To stop carpool (b/c fargate includes a daily cost), 
-  - remove/delete the task and service.  There is no free tier for running a ECS service.  It is about $24/mo.
+To stop carpool (b/c AWS ECS Fargate includes a daily cost, which adds up to about USD$24/mo), 
+  - Remove/delete the task and service.  You can un-register the task definition.  There is no free tier for running a ECS service.  It is about $24/mo.
 
 
 
@@ -104,17 +104,21 @@ To stop carpool (b/c fargate includes a daily cost),
 
 (Option 3)
 
-Find CloudFormation.  Create a Stack, using existing template
-Read the file
+Find CloudFormation in AWS.  Create a Stack, using existing template.
+
+Read the file:
 
 ```bash
 cat carpool_ECS_cloudformation_template.json 
 ```
 
 edit the file for these items
+
     "SecurityGroupIDs".Default
     "SubnetIDs".Default
     "VpcID".Default
+
+which is surrounded with "**" and "**" below:
 ```
      "SecurityGroupIDs": {
         "Type": "CommaDelimitedList",
@@ -134,7 +138,10 @@ edit the file for these items
       }
 ```
 and this item, for 2 environment variables
-    Container.Definition.Secrets
+
+     Container.Definition.Secrets
+
+which is surrounded with "**" and "**" below
 ```
 "Secrets": [
 	{ "name": "GOOGLE_GEOCODE_API_KEY", "valueFrom": "**arn:aws:ssm:us-XXXX-X:XXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY**"},
@@ -142,7 +149,10 @@ and this item, for 2 environment variables
 ]
 ```
 and this item might already exist in your AWS, but you need to change the URL for the role in your account. the role needs to have permission to read the secret specified in the URL
-    Reesource.ECSTask.Properties.ExecutionRoleArn
+
+    Resource.ECSTask.Properties.ExecutionRoleArn
+
+which is surrounded with "**" and "**" below
 ```
    "Resources": {
         "ECSTask": {
@@ -151,10 +161,10 @@ and this item might already exist in your AWS, but you need to change the URL fo
                 "RequiresCompatibilities": [
                     "FARGATE"
                 ],
-                "ExecutionRoleArn": "**arn:aws:iam::XXXXXX:role/ecsTaskExecutionRole**",
+                "ExecutionRoleArn": "<b>arn:aws:iam::XXXXXX:role/ecsTaskExecutionRole</b>",
 ```
 
-My Role (url: arn:aws:iam::XXXXX:role/ecsTaskExecutionRole), under Security Credentials > Roles (on left side), has URL under ARN.  This is what you paste above in ExecutionRoleArn
+My Role (url: arn:aws:iam::XXXXX:role/ecsTaskExecutionRole), under Security Credentials > Roles (on left side), has URL under ARN.  This is what you paste above in ExecutionRoleArn.
 It has this as Inline Permission added below, to read the Parameter Store Value "GOOGLE_JAVASCRIPT_MAP_KEY".  You may need to add permission, for the key you created
 ```
 {

@@ -161,7 +161,7 @@ which is surrounded with "**" and "**" below
                 "RequiresCompatibilities": [
                     "FARGATE"
                 ],
-                "ExecutionRoleArn": "<b>arn:aws:iam::XXXXXX:role/ecsTaskExecutionRole</b>",
+                "ExecutionRoleArn": "`**`arn:aws:iam::XXXXXX:role/ecsTaskExecutionRole`**`",
 ```
 
 My Role (url: arn:aws:iam::XXXXX:role/ecsTaskExecutionRole), under Security Credentials > Roles (on left side), has URL under ARN.  This is what you paste above in ExecutionRoleArn.

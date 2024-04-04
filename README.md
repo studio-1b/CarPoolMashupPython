@@ -78,7 +78,7 @@ It was fun, but there are no Web Servers that accept python as scripting languag
 &nbsp;&nbsp;&nbsp;&nbsp;BUT leave 80 alone 
 &nbsp;&nbsp;&nbsp;&nbsp;(bc it has to match EXPOSE and CMD in dockerfile)
 
-### Use Docker with testdata already uploaded to internet
+### Use Docker with testdata already, uploaded to internet
 
 > [!WARNING]
 > This option still needs the Google Maps API key 
@@ -127,7 +127,7 @@ http://<ipaddress>:8000
 ```
 
 
-### Read Instructions for running the container image above in AWS ECS
+## Read Instructions for running the container image above, in AWS ECS
 
 For about USD$24/mo, you can run the container above in Amazon AWS, and get a public IP address.  The public IP address is temporary, though.  And will be release and re-assigned when you shutdown (or restart) the container
 

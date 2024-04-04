@@ -7,19 +7,22 @@ Working demonstration is posted at: http://100.24.142.145/carpoolmashup/allmembe
 ## 1. To run the source code in python
 
 Obtain a Google API KEY with these API Products:
-    Directions API
-    Distance Matrix API
-    Geocoding API
-    Maps JavaScript API
-    Routing API
+
+     Directions API
+     Distance Matrix API
+     Geocoding API
+     Maps JavaScript API
+     Routing API
 
 > [!WARNING]
 > Carpool uses Google for it's Google Maps product, as well as get coordinates from street addresses.
 > You need a Google Cloud API KEY, to try any of the options below (except for the working demonstration link above).  See [https://www.tictawf.com/blog/using-google-cloud-apis/](https://www.tictawf.com/blog/using-google-cloud-apis/) to read how to get started, on getting a API key, and assigning it the correct API to make it function for Carpool
 
-copy to your linux (or windows, if you have git on windows)
+copy to your linux (or windows, if you have git on windows, but all instruction below are for linux)
 ```
 git clone https://github.com/studio-1b/CarPoolMashupPython.git
+cd CarPoolMashupPython
+cd Python
 ```
 
 You need python installed, and be comfortable with command line.
@@ -28,14 +31,14 @@ If you don't have python installed, run
 apt install python3
 ```
 
-Add to bottom of .bashrc
+Add the following to bottom of your ""~/.bashrc"" file
 ```
 export GOOGLE_GEOCODE_API_KEY=<GOOGLE API_KEY>
 export GOOGLE_MAP_JS_API_KEY=<GOOGLE API_KEY>
 ```
 and re-login, or run the above commands in linux command line to set them in current environment
 
-To run the program, to listen to port 8080, to the map application
+if you had to re-login, change directory to "CarPoolMashupPython/Python".  To run the source code in Python run the command below, which will instruct the web browser to listen to port 8080, to access the map application.
 ```
 python3 main.py 8080
 ```
@@ -46,12 +49,14 @@ cat "CLI testdata script.txt"
 ```
 BTW: "readme.txt" has surpisingly useless data.  I was using it as project task list.
 
-Use your internet browser (ie. chrome) to visit
+
+Using your internet browser (ie. chrome), visit:
 ```
 http://localhost:8080
 ```
+The above gives access to the map part of the application.  This part allows you to see carpool destination and on map, then lists all the members that goto there and on map, then lists different pools you can group them into, then you can show the optimal path for that pool to arrive at destination.  It also has a option, to show on map a pool separation, using a naive spanning tree traversal, of all members into separate pools, assuming 3 to 4 in pool.
 
-The command line portion of the program, is to add/change data.  It has a menu, so it should be easy enough to figure out.
+The command line portion of the program you should see already as a menu, after running the python3 command.  This CLI menu is to add/change data, shown in carpool.  It has a menu, so it should be easy enough to figure out.  You can create members, or carpool destinations using the CLI, as well as functions available in map.
 
 
 ## Re: source code.  In hindsight, I would've liked to 
@@ -78,13 +83,13 @@ It was fun, but there are no Web Servers that accept python as scripting languag
 &nbsp;&nbsp;&nbsp;&nbsp;BUT leave 80 alone 
 &nbsp;&nbsp;&nbsp;&nbsp;(bc it has to match EXPOSE and CMD in dockerfile)
 
-### Use Docker with testdata already, uploaded to internet
+### Use Docker container image already loaded with testdata, download from internet
 
 > [!WARNING]
 > This option still needs the Google Maps API key 
 
-This container image was built with slightly different Dockerfile, than the one in source code.  It runs on default on port 80 (above shows it runs on 8080).  The instructions below tells to pull and run the image on the public internet repository where I uploaded carpool image, and change to listening port to 8000.  There is a reason, I used 8000, it is b/c 80 is often used by any webserver running on your computer and they will conflict.
-Notice the API keys still need to be supplied as arguments.
+This container image was built with slightly different Dockerfile, than the one in source code.  It runs by default on port 80 (above shows the built image runs on 8080).  The instructions below tells to pull and run the image from the public internet repository where I uploaded a already built carpool container image. This command also change the listening port to 8000 (using port forwarding).  There is a reason, I used port 8000.  It is b/c port 80 is often used by any webserver running on your computer and they will often conflict.
+Also, notice the API keys still need to be supplied as arguments.
 
 ```
 docker run -x GOOGLE_GEOCODE_API_KEY=<GOOGLE API_KEY> -x GOOGLE_MAP_JS_API_KEY=<GOOGLE API_KEY>
@@ -95,8 +100,8 @@ if you use the instructions above, direct your browser to:
 ```
 http://localhost:8000
 ```
-or if the container is running on a different computer than the one the browser is running on, find the ip address using
-for windows
+or if the container is running on a different computer, than the one the browser is running on, find the ip address for the container host, using the commands below
+...for windows
 ```
 ipconfig
 ```
@@ -107,7 +112,7 @@ ipconfig
 >         IPv4 Address. . . . . . . . . . . : 192.168.1.102
 
 
-for linux (eth0 may be different for you, but always starts w/ "e"thernet or "w"ireless)
+...for linux (eth0 may be different for you, but always starts w/ "e"thernet or "w"ireless)
 ```
 ifconfig
 ip addr
@@ -131,6 +136,7 @@ http://<ipaddress>:8000
 
 For about USD$24/mo, you can run the container above in Amazon AWS, and get a public IP address.  The public IP address is temporary, though.  And will be release and re-assigned when you shutdown (or restart) the container
 
+Click the link below to read directions for running Carpool in a container, on Amazon AWS ECS Fargate
 [Aws/README.md](Aws/README.md)
 
 

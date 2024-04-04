@@ -93,11 +93,11 @@ for windows
 ```
 ipconfig
 ```
-Ethernet adapter Ethernet ... :
-(or Wireless LAN adapter Local Area Connection ... :)
-   Connection-specific DNS Suffix  . :
-   Link-local IPv6 Address . . . . . : fe80::e023:889:8b1c:bc97%4
-   IPv4 Address. . . . . . . . . . . : 192.168.1.102
+    Ethernet adapter Ethernet ... :
+    (or Wireless LAN adapter Local Area Connection ... :)
+        Connection-specific DNS Suffix  . :
+        Link-local IPv6 Address . . . . . : fe80::e023:889:8b1c:bc97%4
+        IPv4 Address. . . . . . . . . . . : 192.168.1.102
 
 
 for linux (eth0 may be different for you, but always starts w/ "e"thernet or "w"ireless)
@@ -105,13 +105,13 @@ for linux (eth0 may be different for you, but always starts w/ "e"thernet or "w"
 ifconfig
 ip addr
 ```
-eth0: ...
-        inet 192.168.1.102  ...
-...
-
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-...
-inet 192.168.1.102/24 ...
+    eth0: ...
+            inet 192.168.1.102  ...
+    ...
+or
+    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    ...
+    inet 192.168.1.102/24 ...
 
 
 and paste (the 192.168.1.102, in above is example, use the output from your computer)

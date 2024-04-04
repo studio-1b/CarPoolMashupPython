@@ -28,13 +28,23 @@ export GOOGLE_MAP_JS_API_KEY=<GOOGLE API_KEY>
 ```
 and re-login, or run the above commands in linux command line to set them in current environment
 
+To run the program, to listen to port 8080, to the map application
+```
+python3 main.py 8080
+```
 
-
-Read for additional instructions to run
+Read for additional instructions to run, if you encounter problems
 ```
 cat "CLI testdata script.txt" 
 ```
 BTW: "readme.txt" has surpisingly useless data.  I was using it as project task list.
+
+Use your internet browser (ie. chrome) to visit
+```
+http://localhost:8080
+```
+
+The command line portion of the program, is to add/change data.  It has a menu, so it should be easy enough to figure out.
 
 
 ## Re: source code.  In hindsight, I would've liked to 

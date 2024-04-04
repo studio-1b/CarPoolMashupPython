@@ -119,24 +119,24 @@ edit the file for these items
     "VpcID".Default
 
 which is surrounded with "**" and "**" below:
-```
-     "SecurityGroupIDs": {
-        "Type": "CommaDelimitedList",
-        "Default": "**sg-XXXXXXXXXXXXX**"
-      },
-      "SubnetIDs": {
-        "Type": "CommaDelimitedList",
-        "Default": "**subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX**"
-      },
-      "VpcID": {
-        "Type": "String",
-        "Default": "**vpc-XXXXXXXXXXX**"
-      },
-      "LoadBalancerName": {
-        "Type": "String",
-        "Default": ""
-      }
-```
+
+>     "SecurityGroupIDs": {
+>        "Type": "CommaDelimitedList",
+>        "Default": "**sg-XXXXXXXXXXXXX**"
+>      },
+>      "SubnetIDs": {
+>        "Type": "CommaDelimitedList",
+>        "Default": "**subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX**"
+>      },
+>      "VpcID": {
+>        "Type": "String",
+>        "Default": "**vpc-XXXXXXXXXXX**"
+>      },
+>      "LoadBalancerName": {
+>        "Type": "String",
+>        "Default": ""
+>      }
+
 and this item, for 2 environment variables
 
      Container.Definition.Secrets

@@ -118,44 +118,47 @@ edit the file for these items
     "SubnetIDs".Default
     "VpcID".Default
 
-which is surrounded with "**" and "**" below:
+which is **bolded** below:
 
 <pre>
->     "SecurityGroupIDs": {
->        "Type": "CommaDelimitedList",
->        "Default": "<b>sg-XXXXXXXXXXXXX</b>"
->      },
->      "SubnetIDs": {
->        "Type": "CommaDelimitedList",
->        "Default": "<b>subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX</b>"
->      },
->      "VpcID": {
->        "Type": "String",
->        "Default": "<b>vpc-XXXXXXXXXXX</b>"
->      },
->      "LoadBalancerName": {
->        "Type": "String",
->        "Default": ""
->      }
+     "SecurityGroupIDs": {
+        "Type": "CommaDelimitedList",
+        "Default": "<b><i>sg-XXXXXXXXXXXXX</i></b>"
+      },
+      "SubnetIDs": {
+        "Type": "CommaDelimitedList",
+        "Default": "<b><i>subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX</i></b>"
+      },
+      "VpcID": {
+        "Type": "String",
+        "Default": "<b><i>vpc-XXXXXXXXXXX</i></b>"
+      },
+      "LoadBalancerName": {
+        "Type": "String",
+        "Default": ""
+      }
 </pre>
 
 and this item, for 2 environment variables
 
      Container.Definition.Secrets
 
-which is surrounded with "**" and "**" below
-```
+which is **bolded** below
+
+<pre>
 "Secrets": [
-	{ "name": "GOOGLE_GEOCODE_API_KEY", "valueFrom": "**arn:aws:ssm:us-XXXX-X:XXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY**"},
-	{ "name": "GOOGLE_MAP_JS_API_KEY", "valueFrom": "**arn:aws:ssm:us-XXXX-X:XXXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY**"}
+	{ "name": "GOOGLE_GEOCODE_API_KEY", "valueFrom": "<b><i>arn:aws:ssm:us-XXXX-X:XXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY</i></b>"},
+	{ "name": "GOOGLE_MAP_JS_API_KEY", "valueFrom": "<b><i>arn:aws:ssm:us-XXXX-X:XXXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY</i></b>"}
 ]
-```
+</pre>
+
 and this item might already exist in your AWS, but you need to change the URL for the role in your account. the role needs to have permission to read the secret specified in the URL
 
     Resource.ECSTask.Properties.ExecutionRoleArn
 
-which is surrounded with "**" and "**" below
-```
+which is **bolded** below:
+
+<pre>
    "Resources": {
         "ECSTask": {
             "Type": "AWS::ECS::TaskDefinition",
@@ -163,10 +166,10 @@ which is surrounded with "**" and "**" below
                 "RequiresCompatibilities": [
                     "FARGATE"
                 ],
-                "ExecutionRoleArn": "`**`arn:aws:iam::XXXXXX:role/ecsTaskExecutionRole`**`",
-```
+                "ExecutionRoleArn": "<b><i>arn:aws:iam::XXXXXX:role/ecsTaskExecutionRole</i></b>",
+</pre>
 
-My Role (url: arn:aws:iam::XXXXX:role/ecsTaskExecutionRole), under Security Credentials > Roles (on left side), has URL under ARN.  This is what you paste above in ExecutionRoleArn.
+My Role (url: **arn:aws:iam::XXXXX:role/ecsTaskExecutionRole**), under AWS > Security Credentials > Roles (on left side), has URL under ARN.  This is what you paste above in ExecutionRoleArn.
 It has this as Inline Permission added below, to read the Parameter Store Value "GOOGLE_JAVASCRIPT_MAP_KEY".  You may need to add permission, for the key you created
 ```
 {

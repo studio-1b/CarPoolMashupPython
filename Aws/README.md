@@ -37,12 +37,12 @@ Login to AWS
 - You need to store the Google API KEY as value, and give it a unique name, ie. like mine: GOOGLE_JAVASCIPT_MAP_KEY
 - Reference: https://aws.plainenglish.io/managing-ecs-application-secrets-with-aws-parameter-store-a1f37db10575
 - The user who will be creating the ECS container, has to have this permission assigned to read the the value (which is the API KEY).
-    {   "Version": "2012-10-17",
-        "Statement": [
-            {   "Effect": "Allow",
-                "Action": "ssm:GetParameters",
-                "Resource": [ "arn:aws:ssm:us-east-1:1XXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY" ]
-            } ] }
+     {   "Version": "2012-10-17",
+         "Statement": [
+             {   "Effect": "Allow",
+                 "Action": "ssm:GetParameters",
+                 "Resource": [ "arn:aws:ssm:us-east-1:1XXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY" ]
+             } ] }
 To Add this permission, goto Users (or Role, depending on who is missing this)
 
 (Options 1 & 2)

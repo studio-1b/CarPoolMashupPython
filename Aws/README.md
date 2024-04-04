@@ -120,22 +120,24 @@ edit the file for these items
 
 which is surrounded with "**" and "**" below:
 
+<pre>
 >     "SecurityGroupIDs": {
 >        "Type": "CommaDelimitedList",
->        "Default": "**sg-XXXXXXXXXXXXX**"
+>        "Default": "<b>sg-XXXXXXXXXXXXX</b>"
 >      },
 >      "SubnetIDs": {
 >        "Type": "CommaDelimitedList",
->        "Default": "**subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX**"
+>        "Default": "<b>subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX</b>"
 >      },
 >      "VpcID": {
 >        "Type": "String",
->        "Default": "**vpc-XXXXXXXXXXX**"
+>        "Default": "<b>vpc-XXXXXXXXXXX</b>"
 >      },
 >      "LoadBalancerName": {
 >        "Type": "String",
 >        "Default": ""
 >      }
+</pre>
 
 and this item, for 2 environment variables
 

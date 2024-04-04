@@ -6,6 +6,13 @@ Working demonstration is posted at: http://100.24.142.145/carpoolmashup/allmembe
 
 ## 1. To run the source code in python
 
+Obtain a Google API KEY with these API Products:
+    Directions API
+    Distance Matrix API
+    Geocoding API
+    Maps JavaScript API
+    Routing API
+
 > [!WARNING]
 > Carpool uses Google for it's Google Maps product, as well as get coordinates from street addresses.
 > You need a Google Cloud API KEY, to try any of the options below (except for the working demonstration link above).  See [https://www.tictawf.com/blog/using-google-cloud-apis/](https://www.tictawf.com/blog/using-google-cloud-apis/) to read how to get started, on getting a API key, and assigning it the correct API to make it function for Carpool
@@ -93,11 +100,11 @@ for windows
 ```
 ipconfig
 ```
-    Ethernet adapter Ethernet ... :
-    (or Wireless LAN adapter Local Area Connection ... :)
-        Connection-specific DNS Suffix  . :
-        Link-local IPv6 Address . . . . . : fe80::e023:889:8b1c:bc97%4
-        IPv4 Address. . . . . . . . . . . : 192.168.1.102
+>    Ethernet adapter Ethernet ... :
+>    (or Wireless LAN adapter Local Area Connection ... :)
+>        Connection-specific DNS Suffix  . :
+>        Link-local IPv6 Address . . . . . : fe80::e023:889:8b1c:bc97%4
+>        IPv4 Address. . . . . . . . . . . : 192.168.1.102
 
 
 for linux (eth0 may be different for you, but always starts w/ "e"thernet or "w"ireless)
@@ -105,13 +112,13 @@ for linux (eth0 may be different for you, but always starts w/ "e"thernet or "w"
 ifconfig
 ip addr
 ```
-    eth0: ...
-            inet 192.168.1.102  ...
-    ...
+>    eth0: ...
+>            inet 192.168.1.102  ...
+>    ...
 or
-    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-    ...
-    inet 192.168.1.102/24 ...
+>    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+>    ...
+>    inet 192.168.1.102/24 ...
 
 
 and paste (the 192.168.1.102, in above is example, use the output from your computer)

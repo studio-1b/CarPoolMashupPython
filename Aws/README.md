@@ -4,22 +4,22 @@ Login to AWS
 
 ## Manually configuring AWS, ECS-Fargate to run image from existing image
 
-### 3 Options
+### 3 Options to deploy to Amazon AWS ECS (bolded)
 1. **Ok Practices method:** Pull Image from AWS ECR-private, run in AWS ECS, manually adding the KEYS as environment variables
     - A private repo in AWS ECR, only users with access to your AWS account, can pull this image, so it can have secrets inside, but better not to
     - When you create AWS ECS Fargate container/service/cluster, you specify environment variables.  Carpool (as well as many containerized applications) can read secrets from environment variables.  Secrets meaning username/passwords/keys.  The person creating the ECS container/service/cluster knows has to know the secrets, to enter it as hardcoded environment variables.
         * Needed: Google API KEY
         * Know how to check AWS Account Credentials for Roles, 
         * Be able to create AWS ECS container/service/cluster 
-2. **Better Practices method:** Pull cleaned and no proprietary Image from AWS ECR-public, run in AWS ECS, and specify Environment Variables to pull from AWS Parameter Store
+2. **Better Practices method:** Pull cleaned (and no proprietary information inside) image from AWS ECR-public, run in AWS ECS, and specify Environment Variables to pull from AWS Parameter Store
     - A public repo in AWS ECR, all users on internet can pull this image, so it CANNOT have proprietary information, nor passwords stored inside the repo image, b/c it will be available for anyone to examine using the right tools available on the internet.
-    - When you create AWS ECS Fargate container/service/cluster, and specify environment variables, there is a dropdown option for "ValueFrom".  The default is "Value".  Changing it to "ValueFrom" allows you to paste a AWS Parameter Store URL.  A AWS Parameter Store URL, is a unique identifier for a variable created in your AWS Account.  You put secrets such as username/passwords/keys/connectionsstring/privateurl in AWS Parameter Store.  The ECS will read from this parameter store and put it in the container environment variable on startup.  The good feature is that you can secure the Parameter Store value, from other eyes, and they only see the URL.  It also has advantages, that you only have to change these keys/passwords in one place.  The bad thing is, that bc they are environment variable injected on startup, the containers need to be restarted to reflect any changes.
+    - When you create AWS ECS Fargate container/service/cluster, and specify environment variables, there is a dropdown option for "ValueFrom".  The default is "Value".  Changing it to "ValueFrom" allows you to paste a AWS Parameter Store URL.  A AWS Parameter Store URL, is a unique identifier for a variable created in your AWS Account.  You put secrets such as username/passwords/keys/connectionsstring/privateurl in AWS Parameter Store.  The ECS will read from this parameter store and put it in the container environment variable on startup.  A good feature is that you can secure the Parameter Store value from other eyes who create the ECS container/service/cluster, and they only see the URL (starts with ARN).  Using AWS Parameter store also has the advantage that you only have to change these keys/passwords in one place.  The bad thing is that bc they are environment variables, injected on startup, the containers need to be restarted to reflect any changes.
         * Needed: Google API Key
         * Know how to check AWS Account Credentials for Roles
         * (new) Know how to change AWS Role permission, to read Parameter below
         * (new) Know how to create AWS Parameter Store to store above Parameter key
         * Be able to create AWS ECS container/service/cluster 
-        * (new) how to change environment variable to read from parameter store
+        * (new) While doing above, know how to change environment variable setting to read from parameter store
 3. **Best Practice method:** Use a AWS CloudFormation JSON template.  It should have the configurations you redo in the above steps, but all stored in a file.  
     - And whenever you want to create a new ECS container/service/cluster, you just paste the JSON(or YAML) into AWS CloudFormation
         * Needed: Google API Key
@@ -37,12 +37,13 @@ Login to AWS
 - You need to store the Google API KEY as value, and give it a unique name, ie. like mine: GOOGLE_JAVASCIPT_MAP_KEY
 - Reference: https://aws.plainenglish.io/managing-ecs-application-secrets-with-aws-parameter-store-a1f37db10575
 - The user who will be creating the ECS container, has to have this permission assigned to read the the value (which is the API KEY).
-     {   "Version": "2012-10-17",
-         "Statement": [
-             {   "Effect": "Allow",
-                 "Action": "ssm:GetParameters",
-                 "Resource": [ "arn:aws:ssm:us-east-1:1XXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY" ]
-             } ] }
+4. Preformatted text in a list item:
+        {   "Version": "2012-10-17",
+            "Statement": [
+                {   "Effect": "Allow",
+                    "Action": "ssm:GetParameters",
+                    "Resource": [ "arn:aws:ssm:us-east-1:1XXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY" ]
+                } ] }
 To Add this permission, goto Users (or Role, depending on who is missing this)
 
 (Options 1 & 2)
@@ -67,13 +68,13 @@ Task Defintion:
 - After Task is created, Click Deploy > Create Service
 Create a Service
 - You don't have cluster yet (or if you skipped ahead, pick the one you created)
-  * Click <Create a new cluster>
+  * Click "Create a new cluster"
     - This should have popped up a new window or tab
     - Create a Cluster
       - Cluster name: <anything you want, ie.carpool-cluster>
       - AWS Fargate: checked
     - Close this new window/tab
-  * click <refresh> for cluster
+  * click "refresh" for cluster
   * Service name: <anything you want, ie.carpool-service>
   * VPC: Any
   * Subnet: Any

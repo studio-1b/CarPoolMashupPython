@@ -1,0 +1,179 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "carpool-mashup-ecs-stack , https://studio1b-cloudformation-templates.s3.amazonaws.com/carpool_ecs_cloudformation_template.json",
+    "Parameters": {
+      "ECSTaskName": {
+        "Type": "String",
+        "Description": "Specifies the ECS Task Name with which the resources would be associated",
+        "Default": "carpool-mashup-startup"
+      },
+      "ECSImageName": {
+        "Type": "String",
+        "Description": "Specifies the ECS Image Name with which the resources would be associated",
+        "Default": "carpool-mashup-image"
+      },
+      "ECSClusterName": {
+        "Type": "String",
+        "Description": "Specifies the ECS Cluster Name with which the resources would be associated",
+        "Default": "carpool-mashup-cluster"
+      },
+      "ECSServiceName": {
+        "Type": "String",
+        "Description": "Specifies the ECS Cluster Name with which the resources would be associated",
+        "Default": "carpool-mashup-service"
+      },
+      "SecurityGroupIDs": {
+        "Type": "CommaDelimitedList",
+        "Default": "sg-XXXXXXXXXXXXX"
+      },
+      "SubnetIDs": {
+        "Type": "CommaDelimitedList",
+        "Default": "subnet-XXXXXXXXXXXX,subnet-XXXXXXXXXX"
+      },
+      "VpcID": {
+        "Type": "String",
+        "Default": "vpc-XXXXXXXXXXX"
+      },
+      "LoadBalancerName": {
+        "Type": "String",
+        "Default": ""
+      }
+    },
+    "Resources": {
+        "ECSTask": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "RequiresCompatibilities": [
+                    "FARGATE"
+                ],
+                "ExecutionRoleArn": "arn:aws:iam::XXXX:role/ecsTaskExecutionRole",
+                "Family" : {
+                  "Ref": "ECSTaskName"
+                },
+                "Cpu": 512,
+                "Memory": 1024,
+                "NetworkMode": "awsvpc",
+                "ContainerDefinitions": [
+                    {
+                        "Name": {
+                            "Ref": "ECSImageName"
+                        },
+                        "Image": "public.ecr.aws/y8w3p2i4/carpoolmashup-with-testdata:latest",
+                        "MemoryReservation": 512,
+                        "Memory": 1024,
+                        "PortMappings": [
+                            {
+                                "ContainerPort": 80,
+                                "Protocol": "tcp"
+                            }
+                        ],
+			"Secrets": [
+				{ "name": "GOOGLE_GEOCODE_API_KEY", "valueFrom": "arn:aws:ssm:us-XXXX-X:XXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY"},
+				{ "name": "GOOGLE_MAP_JS_API_KEY", "valueFrom": "arn:aws:ssm:us-XXXX-X:XXXXXXXXX:parameter/GOOGLE_JAVASCIPT_MAP_KEY"}
+			]
+                    }
+                ]
+            }
+        },
+        "ECSCluster": {
+          "Type": "AWS::ECS::Cluster",
+          "Properties": {
+            "ClusterName": {
+              "Ref": "ECSClusterName"
+            },
+            "CapacityProviders": [
+              "FARGATE",
+              "FARGATE_SPOT"
+            ],
+            "ClusterSettings": [
+              {
+                "Name": "containerInsights",
+                "Value": "disabled"
+              }
+            ],
+            "Configuration": {
+              "ExecuteCommandConfiguration": {
+                "Logging": "DEFAULT"
+              }
+            },
+            "ServiceConnectDefaults": {
+              "Namespace": {
+                "Ref": "ECSClusterName"
+              }
+            },
+            "Tags": []
+          }
+        },
+        "ECSService": {
+          "Type": "AWS::ECS::Service",
+          "Properties": {
+            "Cluster": {
+              "Ref": "ECSCluster"
+            },
+            "TaskDefinition": {
+              "Ref": "ECSTask"
+            },
+            "LaunchType": "FARGATE",
+            "ServiceName": {
+              "Ref": "ECSServiceName"
+            },
+            "SchedulingStrategy": "REPLICA",
+            "DesiredCount": 1,
+            "NetworkConfiguration": {
+              "AwsvpcConfiguration": {
+                "AssignPublicIp": "ENABLED",
+                "SecurityGroups": {
+                  "Ref": "SecurityGroupIDs"
+                },
+                "Subnets": {
+                  "Ref": "SubnetIDs"
+                }
+              }
+            },
+            "PlatformVersion": "LATEST",
+            "DeploymentConfiguration": {
+              "MaximumPercent": 200,
+              "MinimumHealthyPercent": 50,
+              "DeploymentCircuitBreaker": {
+                "Enable": true,
+                "Rollback": true
+              }
+            },
+            "DeploymentController": {
+              "Type": "ECS"
+            },
+            "ServiceConnectConfiguration": {
+              "Enabled": false
+            },
+            "Tags": [],
+            "EnableECSManagedTags": true
+          }
+        }
+    },
+    "Outputs": {
+      "ECSTask": {
+        "Description": "The created task.",
+        "Value": {
+          "Ref": "ECSTask"
+        }
+      },
+      "ECSCluster": {
+        "Description": "The created cluster.",
+        "Value": {
+          "Ref": "ECSCluster"
+        }
+      },
+      "ClusterName": {
+        "Description": "The cluster used to create the service.",
+        "Value": {
+          "Ref": "ECSClusterName"
+        }
+      },
+      "ECSService": {
+        "Description": "The created service.",
+        "Value": {
+          "Ref": "ECSService"
+        }
+      }  
+    }
+}

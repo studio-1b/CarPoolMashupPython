@@ -190,7 +190,7 @@ class destinationlistrules(baselist):
                     found = self._highlight("Found [", searchfor, "] in geocode " + result1, result2)
             if not found and destobj["memberlistfile"] and os.path.exists(destobj["memberlistfile"]):
                 memberlistobj = carpooldata.load(destobj["memberlistfile"])
-                # {"email": "byuan@bcit.ca", "memberfile": "9eab8a5b-b61e-4225-a1a1-9c49c5554cd1member.json"}
+                # {"email": "by@bcit.ca", "memberfile": "9eab8a5b-b61e-4225-a1a1-9c49c5554cd1member.json"}
                 for item2 in memberlistobj:
                     memberobj = carpooldata.load(item2["memberfile"])  # maybe use lockload() here, but reads should always be on a whole file bc of the "bufferserialize()"
                     result1, result2 = self._jsonsearch(memberobj, searchfor)
